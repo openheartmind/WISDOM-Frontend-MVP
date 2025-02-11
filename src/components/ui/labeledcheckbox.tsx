@@ -1,12 +1,12 @@
 "use client"
 
-import { Input } from "@/components/ui/input"
 import { Checkbox } from "./checkbox"
+import { ChangeEventHandler } from "react"
 
 interface Props {
   label: string
   id: string
-  onChange: any
+  onChange: ChangeEventHandler<HTMLInputElement>
 }
 
 export default function LabeledCheckbox(props: Props) {

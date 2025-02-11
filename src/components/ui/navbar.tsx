@@ -1,13 +1,10 @@
-"use client"
-
-import { Dispatch, SetStateAction } from "react"
+import * as React from "react"
 
 interface Props {
   title: string
-  setTitle: Dispatch<SetStateAction<string>>
 }
 
-export default function NavBar(props: Props) {
+const NavBar = (props: Props) => {
   return (
     <div>
       <div className="flex flex-col h-95 items-center justify-top absolute top-5 left-0 right-0">
@@ -27,8 +24,10 @@ export default function NavBar(props: Props) {
           </div>
         </div>
       </div>
-    <div className="md:mb-20 mb-15">
-    </div>
+      <div className="md:mb-20 mb-15">
+      </div>
     </div>
   )
 }
+
+export { NavBar }
