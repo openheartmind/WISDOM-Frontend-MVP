@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import LabeledInput from "@/components/ui/labeledInput"
 import LabeledCheckbox from "@/components/ui/labeledcheckbox"
@@ -27,9 +27,7 @@ export default function RegistrationForm() {
     country: ""
   })
 
-  const agreementAcceptanceHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAgreementAcceptance(e.target.checked)
-  }
+  useEffect(()=> console.debug(`Checkbox: ${agreementAcceptance}`), [agreementAcceptance])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -144,7 +142,7 @@ export default function RegistrationForm() {
           </div>
 
           <div className="flex self-center m-w-full w-60 justify-self-center gap-4 pt-4">
-            <LabeledCheckbox id="TnCs" label={'By ticking this box I accept the Terms & Conditions'} onChange={agreementAcceptanceHandler} />
+            <LabeledCheckbox id="TnCs" label={'By ticking this box I accept the Terms & Conditions'} onChangeHandler={setAgreementAcceptance} />
           </div>
 
           <div className="flex justify-center">
