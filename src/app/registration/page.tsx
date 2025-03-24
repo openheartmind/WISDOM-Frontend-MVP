@@ -5,6 +5,16 @@ import { Button } from "@/components/ui/button"
 import LabeledInput from "@/components/ui/labeledInput"
 import LabeledCheckbox from "@/components/ui/labeledcheckbox"
 import { NavBar } from "@/components/ui/navbar"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 interface UserDetails {
   email: string
@@ -27,7 +37,7 @@ export default function RegistrationForm() {
     country: ""
   })
 
-  useEffect(()=> console.debug(`Checkbox: ${agreementAcceptance}`), [agreementAcceptance])
+  useEffect(() => console.debug(`Checkbox: ${agreementAcceptance}`), [agreementAcceptance])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -141,12 +151,24 @@ export default function RegistrationForm() {
               } />
           </div>
 
-          <div className="flex self-center m-w-full w-60 justify-self-center gap-4 pt-4">
-            <LabeledCheckbox id="TnCs" label={'By ticking this box I accept the Terms & Conditions'} onChangeHandler={setAgreementAcceptance} />
+          <div className="flex justify-center gap-4 pt-4">
+            <Dialog>
+              <DialogTrigger>
+            <span className="text-blue-600 underline">Click here to view the Terms & Conditions</span>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Terms & Conditions</DialogTitle>
+                  <DialogDescription>
+                    This window will contains the whole spiel of T&Cs
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
           </div>
 
-          <div className="flex justify-center">
-            <span className="text-blue-600 underline">Click here to view the Terms & Conditions</span>
+          <div className="flex self-center m-w-full w-60 justify-self-center">
+            <LabeledCheckbox id="TnCs" label={'By ticking this box I accept the Terms & Conditions'} onChangeHandler={setAgreementAcceptance} />
           </div>
 
           <div className="flex justify-between gap-4 pt-4">
