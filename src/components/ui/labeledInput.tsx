@@ -14,11 +14,9 @@ interface Props {
 
 export default function LabeledInput(props: Props) {
   return (
-    <div className="flex flex-row">
-      <div  className="flex flex-auto mx-auto">
-        <label htmlFor={props.id} className="block text-xl mb-2">
-          {props.label} {props.isRequired ? <span style={{ color: 'red' }}>(*)</span> : ''}
-        </label>
+    <div className="flex flex-auto mx-auto justify-between">
+      <div className="items-center block text-lg mb-2">
+        {props.label} {props.isRequired ? <span style={{ color: 'red' }}>(*)</span> : ''}
       </div>
       <div className="flex mx-30">
         <Input
@@ -28,7 +26,7 @@ export default function LabeledInput(props: Props) {
           className="w-full border-gray-300"
           value={props.value}
           onChange={props.onChange}
-          style={{maxWidth: props.fullWidth ? 'unset' : '190px'}}
+          style={{ maxWidth: props.fullWidth ? 'unset' : '190px' }}
         />
       </div>
     </div>

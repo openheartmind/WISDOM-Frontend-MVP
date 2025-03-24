@@ -29,7 +29,6 @@ export default function LabeledCheckbox(props: Props) {
     <div className="flex flex-row gap-3">
       <div className="self-center">
         <Form {...form}>
-          <form className="space-y-8">
             <FormField
               control={form.control}
               name={"agreement"}
@@ -40,13 +39,10 @@ export default function LabeledCheckbox(props: Props) {
                   </FormControl>
                 </FormItem>
               )} />
-          </form>
         </Form>
       </div>
-      <div className="self-center">
-        <label htmlFor={props.id}>
-          {props.label}
-        </label>
+      <div className="flex items-center space-x-2">
+        {props.label}
       </div>
     </div>
   )
