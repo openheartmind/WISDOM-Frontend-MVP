@@ -1,4 +1,4 @@
-import { User } from "lucide-react"
+import { CogIcon, User } from "lucide-react"
 import * as React from "react"
 
 interface Props {
@@ -32,7 +32,7 @@ const NavBar = (props: Props) => {
 
           {/* Options */}
           <div className="mx-auto">
-              { props.role && props.role === Roles.Admin && <User className="h-10 w-10"  /> }
+              { props.role && (props.role === Roles.Admin ? <CogIcon className="h-10 w-10"  /> : <User className="h-10 w-10"  /> ) }
           </div>
         </div>
       </div>
