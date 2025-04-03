@@ -69,8 +69,9 @@ export default function UpdateProfile() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <Label htmlFor="email" className="text-sm font-normal">
+        
+        <div className="flex items-center gap-4">
+          <Label htmlFor="email" className="text-sm font-normal w-1/3">
             Email
           </Label>
           <Input
@@ -79,12 +80,12 @@ export default function UpdateProfile() {
             type="email"
             value={formData.email}
             onChange={handleChange}
-            className="bg-gray-100"
+            className="bg-gray-100 w-2/3"
           />
         </div>
 
-        <div>
-          <Label htmlFor="displayName" className="text-sm font-normal">
+        <div className="flex items-center gap-4">
+          <Label htmlFor="displayName" className="text-sm font-normal w-1/3">
             Display Name <span className="text-red-500">*</span>
           </Label>
           <Input
@@ -93,12 +94,12 @@ export default function UpdateProfile() {
             value={formData.displayName}
             onChange={handleChange}
             required
-            className="bg-gray-100"
+            className="bg-gray-100 w-2/3"
           />
         </div>
 
-        <div>
-          <Label htmlFor="fullName" className="text-sm font-normal">
+        <div className="flex items-center gap-4">
+          <Label htmlFor="fullName" className="text-sm font-normal w-1/3">
             Full Name
           </Label>
           <Input
@@ -106,30 +107,42 @@ export default function UpdateProfile() {
             name="fullName"
             value={formData.fullName}
             onChange={handleChange}
-            className="bg-gray-100"
+            className="bg-gray-100 w-2/3"
           />
         </div>
 
-        <div>
-          <Label htmlFor="phone" className="text-sm font-normal">
+        <div className="flex items-center gap-4">
+          <Label htmlFor="phone" className="text-sm font-normal w-1/3">
             Phone
           </Label>
-          <Input id="phone" name="phone" value={formData.phone} onChange={handleChange} className="bg-gray-100" />
+          <Input 
+            id="phone" 
+            name="phone" 
+            value={formData.phone} 
+            onChange={handleChange} 
+            className="bg-gray-100 w-2/3" 
+          />
         </div>
 
-        <div>
-          <Label htmlFor="country" className="text-sm font-normal">
+        <div className="flex items-center gap-4">
+          <Label htmlFor="country" className="text-sm font-normal w-1/3">
             Country
           </Label>
-          <Input id="country" name="country" value={formData.country} onChange={handleChange} className="bg-gray-100" />
+          <Input 
+            id="country" 
+            name="country" 
+            value={formData.country} 
+            onChange={handleChange} 
+            className="bg-gray-100 w-2/3" 
+          />
         </div>
 
         <div className="pt-2">
           <p className="text-sm font-normal mb-2">Change Password</p>
 
           <div className="space-y-4">
-            <div>
-              <Label htmlFor="oldPassword" className="text-sm font-normal">
+            <div className="flex items-center gap-4">
+              <Label htmlFor="oldPassword" className="text-sm font-normal w-1/3">
                 Old Password <span className="text-red-500">*</span>
               </Label>
               <Input
@@ -138,12 +151,12 @@ export default function UpdateProfile() {
                 type="password"
                 value={formData.oldPassword}
                 onChange={handleChange}
-                className="bg-gray-100"
+                className="bg-gray-100 w-2/3"
               />
             </div>
 
-            <div>
-              <Label htmlFor="newPassword" className="text-sm font-normal">
+            <div className="flex items-center gap-4">
+              <Label htmlFor="newPassword" className="text-sm font-normal w-1/3">
                 New Password <span className="text-red-500">*</span>
               </Label>
               <Input
@@ -152,7 +165,7 @@ export default function UpdateProfile() {
                 type="password"
                 value={formData.newPassword}
                 onChange={handleChange}
-                className="bg-gray-100"
+                className="bg-gray-100 w-2/3"
               />
             </div>
           </div>
@@ -175,4 +188,3 @@ export default function UpdateProfile() {
     </div>
   )
 }
-
