@@ -1,14 +1,12 @@
 "use client";
 
 import { DataTable } from "@/app/table/data-table";
-// import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { NavBar } from "@/components/ui/navbar";
 import { useEffect, useState } from "react"
-import { Label } from "@/components/ui/label";
 import { columns, Payment } from "../table/columns";
-import getData from "../table/page";
 import { ArrowRightFromLine } from "lucide-react";
+import getData from "../table/page";
 
 export default function Reports() {
   const [title] = useState<string>('Meta-Science')
@@ -29,7 +27,6 @@ export default function Reports() {
 
   return (
     <div className="flex min-h-screen flex-row justify-center p-4">
-      {/* Navigation Bar */}
       <NavBar title={title} />
 
       <div className="w-full max-w-md mt-20">

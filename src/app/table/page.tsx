@@ -7,15 +7,23 @@ export default async function getData(): Promise<Payment[]> {
       id: "728ed52f",
       amount: 100,
       title: "Meta-Science",
-      owner: "Daniel",
+      member: "Daniel",
       email: "m@example.com",
+      contribution: "Website",
+      mi: "",
+      gi: "",
+      co: ""
     },
     {
       id: "728ed52f",
       amount: 100,
       title: "OHM Gathering",
-      owner: "Jack",
+      member: "Jack",
       email: "m@example.com",
+      contribution: "Works",
+      mi: "",
+      gi: "",
+      co: ""
     },
   ]
 }
