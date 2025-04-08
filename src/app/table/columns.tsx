@@ -8,17 +8,33 @@ export type Payment = {
   id: string
   amount: number
   title: string
-  owner: "Jack" | "Daniel" | "John"
-  email: string
+  member: "Jack" | "Daniel" | "John"
+  email: string,
+  contribution: string,
+  mi: string,
+  gi: string,
+  co:string
 }
 
 export const columns: ColumnDef<Payment>[] = [
   {
-    accessorKey: "title",
-    header: "Title",
+    accessorKey: "contribution",
+    header: "Contribution",
   },
   {
-    accessorKey: "owner",
-    header: "Owner",
+    accessorKey: "member",
+    header: "Member",
+  },
+  {
+    accessorKey: "mi",
+    header: "Mi",
+  },
+  {
+    accessorKey: "gr",
+    header: "Gr",
+  },
+  {
+    accessorKey: "co",
+    header: "Co",
   }
 ]
