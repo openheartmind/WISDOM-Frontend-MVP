@@ -1,7 +1,14 @@
+import { CogIcon, User } from "lucide-react"
 import * as React from "react"
 
 interface Props {
-  title: string
+  title: string,
+  role?: string
+}
+
+enum Roles {
+  Admin='admin',
+  Creator='creator'
 }
 
 const NavBar = (props: Props) => {
@@ -17,15 +24,20 @@ const NavBar = (props: Props) => {
           </div>
 
           {/* Title */}
-          <div className="mx-auto">
+          <div className="flex flex-left ml-10 justify-center">
             <label htmlFor="title" className="block text-3xl mb-2 pr-7">
               {props.title}
             </label>
           </div>
+
+          {/* Options */}
+          <div className="mx-auto">
+              { props.role && (props.role === Roles.Admin ? <CogIcon className="h-10 w-10"  /> : <User className="h-10 w-10"  /> ) }
+          </div>
         </div>
       </div>
-      <div className="md:mb-20 mb-15">
-      </div>
+      {/* <div className="md:mb-20 mb-15">
+      </div> */}
     </div>
   )
 }
