@@ -35,7 +35,7 @@ interface NewInstanceDetails {
 const AVAILABLE_ROLES = ["Manager", "Reviewer", "Metaviewer"];
 
 export default function UpdateInstance() {
-  const [title] = useState<string>("New Instance");
+  const [title] = useState<string>("Instance Update");
   const [newMemberEmail, setNewMemberEmail] = useState<string>("");
   const [details, setDetails] = useState<NewInstanceDetails>({
     name: "",
