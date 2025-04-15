@@ -16,7 +16,6 @@ interface UserDetails {
 }
 
 export default function RegistrationForm() {
-  const [title] = useState<string>('New User')
   const [agreementAcceptance, setAgreementAcceptance] = useState<boolean>(false)
   const [details, setDetails] = useState<UserDetails>({
     email: "",
@@ -50,8 +49,7 @@ export default function RegistrationForm() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
-        {/* Navigation Bar */}
-        <NavBar title={title} />
+       
 
         {/* Form Section */}
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">

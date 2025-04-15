@@ -1,24 +1,47 @@
-import { CogIcon, User } from "lucide-react"
-import * as React from "react"
+"use client";
 
-interface Props {
-  title: string,
-  role?: string
-}
+import { CogIcon, User } from "lucide-react";
+import * as React from "react";
+import { usePathname } from "next/navigation";
 
 enum Roles {
-  Admin='admin',
-  Creator='creator'
+  Admin = 'admin',
+  Creator = 'creator'
 }
 
-const NavBar = (props: Props) => {
+const NavBar = () => {
+  const pathname = usePathname();
+  
+  // Determine title and role based on pathname
+  const getTitleAndRole = (path: string) => {
+    if (path.includes("/reports")) {
+      return { title: "Meta-Science", role: Roles.Admin };
+    } else if (path.includes("/instances/new")) {
+      return { title: "New Instance", role: Roles.Creator };
+    }
+    else if (path.includes("/instances/update")) {
+      return { title: "Instance Update", role: Roles.Creator };
+    }
+    else if (path.includes("/instances")) {
+      return { title: "Meta-Science", role: Roles.Admin };
+    }
+    else if (path.includes("/regstration")) {
+      return { title: "New User", role: Roles.Creator };
+    }
+
+    // Default or other paths
+    return { title: "Meta-Science", role: undefined };
+  };
+  
+  const { title, role } = getTitleAndRole(pathname);
+  
   return (
     <div>
       <div className="flex flex-col h-95 items-center justify-top absolute top-5 left-0 right-0">
         <div className="flex flex-row h-95 items-center w-full max-w-md">
           {/* Logo */}
           <div className="w-32 ml-5">
-            <div className="w-full rounded-full size-20 rounded-full bg-gray-100 flex items-center justify-center">
+            <div className="w-full rounded-full size-20 bg-gray-100 flex items-center justify-center">
               <span className="text-3xl">Logo</span>
             </div>
           </div>
@@ -26,13 +49,13 @@ const NavBar = (props: Props) => {
           {/* Title */}
           <div className="flex flex-left ml-10 justify-center">
             <label htmlFor="title" className="block text-3xl mb-2 pr-7">
-              {props.title}
+              {title}
             </label>
           </div>
 
           {/* Options */}
           <div className="mx-auto">
-              { props.role && (props.role === Roles.Admin ? <CogIcon className="h-10 w-10"  /> : <User className="h-10 w-10"  /> ) }
+              { role && (role === Roles.Admin ? <CogIcon className="h-10 w-10"  /> : <User className="h-10 w-10"  /> ) }
           </div>
         </div>
       </div>
@@ -40,6 +63,7 @@ const NavBar = (props: Props) => {
       </div> */}
     </div>
   )
-}
+  
+};
 
-export { NavBar }
+export { NavBar };
