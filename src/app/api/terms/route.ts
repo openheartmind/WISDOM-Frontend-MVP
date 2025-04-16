@@ -1,5 +1,5 @@
 export async function GET(req: Request) {
-  const url = process.env.NEXT_PUBLIC_API_PATH + "/terms.txt";
+  const url = new URL(process.env.NEXT_PUBLIC_BASEURL || '', process.env.NEXT_PUBLIC_TERMS_FILENAME).href;
   const data = await fetch(url).then(async (res) => {
     try {
       return await res?.text();
