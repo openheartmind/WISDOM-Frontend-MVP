@@ -25,7 +25,7 @@ const NavBar = () => {
     else if (path.includes("/instances")) {
       return { title: "Meta-Science", role: Roles.Admin };
     }
-    else if (path.includes("/regstration")) {
+    else if (path.includes("/registration")) {
       return { title: "New User", role: Roles.Creator };
     }
     // Default or other paths
