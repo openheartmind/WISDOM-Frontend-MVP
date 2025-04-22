@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { NextRequest } from "next/server";
 
 const FRONTEND_TOKEN_KEY = process.env.NEXT_PUBLIC_FRONTEND_TOKEN_KEY as string;
@@ -22,7 +23,7 @@ export async function GET(req: NextRequest) {
         throw Error(`Server Error: ${err}`);
       }
     });
-    
+
     // JSON.stringify(data).toLowerCase().includes("code") && data.code === 'otp_expired' -- Optional for detailed returned value
     const verified = JSON.stringify(data).toLowerCase().includes("success") && data.success;
 
@@ -31,9 +32,6 @@ export async function GET(req: NextRequest) {
       headers: { Location: `${process.env.NEXT_PUBLIC_BASEURL as string}/login?verified=${verified}` },
     });
   } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message || "" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return notFound();
   }
 }
