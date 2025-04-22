@@ -11,6 +11,8 @@ interface LoginCredentials {
 }
 
 export default function LoginForm() {
+  const { login } = useAuth();
+  const router = useRouter();
   const [credentials, setCredentials] = useState<LoginCredentials>({
     email: "",
     password: "",
@@ -32,24 +34,27 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     setError(null);
+    setIsSubmitting(true);
 
     try {
-      const result = await login(credentials.email, credentials.password);
+      const success = await login(credentials.email, credentials.password);
 
-      if (result.success) {
-        // Redirect to dashboard or home page after successful login
-        router.push("/");
+      if (success) {
+        router.push("/"); // Redirect to homepage or dashboard
       } else {
-        setError(result.error || "Failed to sign in");
+        setError("Invalid credentials. Please try again.");
       }
     } catch (err) {
-      setError("An unexpected error occurred");
+      setError("An error occurred during login. Please try again.");
       console.error(err);
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
+  };
+
+  const handleNewUser = () => {
+    router.push("/signup");
   };
 
   return (
@@ -62,15 +67,14 @@ export default function LoginForm() {
           </div>
         </div>
 
-        {/* Error message */}
-        {error && (
-          <div className="p-3 rounded bg-red-100 text-red-800 text-sm">
-            {error}
-          </div>
-        )}
-
         {/* Form Section */}
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+              <span className="block sm:inline">{error}</span>
+            </div>
+          )}
+
           <div className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-xl mb-2">
@@ -80,7 +84,6 @@ export default function LoginForm() {
                 id="email"
                 type="email"
                 required
-                disabled={isLoading}
                 className="w-full border-gray-300"
                 value={credentials.email}
                 onChange={(e) =>
@@ -100,7 +103,6 @@ export default function LoginForm() {
                 id="password"
                 type="password"
                 required
-                disabled={isLoading}
                 className="w-full border-gray-300"
                 value={credentials.password}
                 onChange={(e) =>
@@ -117,20 +119,18 @@ export default function LoginForm() {
             <Button
               type="button"
               variant="outline"
-              disabled={isLoading}
               className="flex-1 text-[#2196F3] border-[#2196F3] hover:bg-[#2196F3]/10"
-              onClick={() => {
-                window.location.href = "/signup";
-              }}
+              onClick={handleNewUser}
+              disabled={isSubmitting}
             >
               New User
             </Button>
             <Button
               type="submit"
-              disabled={isLoading}
               className="flex-1 bg-[#2196F3] hover:bg-[#2196F3]/90"
+              disabled={isSubmitting}
             >
-              {isLoading ? "Logging in..." : "Login"}
+              {isSubmitting ? "Logging in..." : "Login"}
             </Button>
           </div>
           <div>
