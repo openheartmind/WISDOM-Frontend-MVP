@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import LabeledInput from "@/components/ui/labeledInput"
 import LabeledCheckbox from "@/components/ui/labeledcheckbox"
 import { NavBar } from "@/components/ui/navbar"
+import { CustomDialog } from "@/components/ui/customdialog"
 
 interface UserDetails {
   email: string
@@ -16,8 +17,10 @@ interface UserDetails {
 }
 
 export default function RegistrationForm() {
+  const [isLoading, setLoading] = useState(true)
   const [title] = useState<string>('New User')
   const [agreementAcceptance, setAgreementAcceptance] = useState<boolean>(false)
+  const [termsAndConditions, setTermsAndConditions] = useState<string>()
   const [details, setDetails] = useState<UserDetails>({
     email: "",
     display: "",
@@ -27,7 +30,20 @@ export default function RegistrationForm() {
     country: ""
   })
 
-  useEffect(()=> console.debug(`Checkbox: ${agreementAcceptance}`), [agreementAcceptance])
+  useEffect(() => {
+    if (isLoading) {
+      fetch("/api/terms", {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'text/plain'
+        }
+      }).then(async (res) => await res.text()).then((data: string) => {
+        setTermsAndConditions(data)
+      });
+    }
+  }, [isLoading])
+
+  useEffect(() => console.debug(`Checkbox: ${agreementAcceptance}`), [agreementAcceptance])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -146,7 +162,9 @@ export default function RegistrationForm() {
           </div>
 
           <div className="flex justify-center">
-            <span className="text-blue-600 underline">Click here to view the Terms & Conditions</span>
+            <CustomDialog title="Terms & Conditions" content={termsAndConditions || ''}>
+              <span className="text-blue-600 underline">Click here to view the Terms & Conditions</span>
+            </CustomDialog>
           </div>
 
           <div className="flex justify-between gap-4 pt-4">
