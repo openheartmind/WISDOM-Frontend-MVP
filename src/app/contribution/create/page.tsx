@@ -73,17 +73,12 @@ export default function ContributionForm() {
   }
 
   return (
-    <div className="max-w-md mx-auto bg-gray-50 min-h-screen">
+    <div className="max-w-md mx-auto min-h-screen">
       <div className="p-4">
-        <h1 className="text-gray-400 text-lg font-light mb-4">Contribution creation</h1>
+    
 
         <div className="bg-white p-4 rounded-md shadow-sm">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="bg-gray-200 rounded-full w-16 h-16 flex items-center justify-center">
-              <span className="text-black font-medium">Logo</span>
-            </div>
-            <span className="text-2xl font-medium">AIMOS</span>
-          </div>
+         
 
           <div className="space-y-4">
             <div>
