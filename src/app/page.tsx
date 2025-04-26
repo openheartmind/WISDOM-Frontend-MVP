@@ -27,9 +27,7 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-row justify-center p-4">
-      <NavBar title={title} role={'admin'} />
-
-      <div className="w-full max-w-md mt-20 space-y-8">
+      <div className="w-full max-w-md space-y-8">
 
         <div className="mx-auto py-10 flex flex-col flex-1 justify-between">
           <div className="text-lg font-bold p-3">

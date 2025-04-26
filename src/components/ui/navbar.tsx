@@ -16,13 +16,13 @@ const NavBar = () => {
   const getTitleAndRole = (path: string) => {
     // Define the paths for which we have created pages
     const validPaths = [
+      "/",
       "/reports",
       "/instances/new",
-      "/instances/update",
-      "/instances",
+      "/instances/id/update",
       "/registration",
       "/user-detail",
-      "/contribution/create"
+      "/instances/id/contribution/create"
     ];
 
     // Check if the current path matches any of our valid paths
@@ -34,24 +34,24 @@ const NavBar = () => {
     }
 
     // For valid paths, return the appropriate title and role
-    if (path.includes("/reports")) {
+    if (path === "/") {
+      return { title: "OHM", role: Roles.Admin };
+    } else if (path === "/reports") {
       return { title: "Meta-Science", role: Roles.Admin };
-    } else if (path.includes("/instances/new")) {
+    } else if (path === "/instances/new") {
       return { title: "New Instance", role: Roles.Creator };
-    } else if (path.includes("/instances/update")) {
+    } else if (path === "/instances/id/update") {
       return { title: "Instance Update", role: Roles.Creator };
-    } else if (path.includes("/instances")) {
-      return { title: "Meta-Science", role: Roles.Admin };
-    } else if (path.includes("/registration")) {
+    } else if (path === "/registration") {
       return { title: "New User", role: undefined };
-    } else if (path.includes("/user-detail")) {
+    } else if (path === "/user-detail") {
       return { title: "Update Details", role: Roles.Creator };
-    } else if (path.includes("/contribution/create")) {
+    } else if (path === "/instances/id/contribution/create") {
       return { title: "AIMOS", role: undefined };
     }
 
-    // Default case - shouldn't reach here with our validPaths check, but included for safety
-    return { title: "Meta-Science", role: undefined };
+    // Default case - unhandled pages
+    return null;
   };
 
   const result = getTitleAndRole(pathname);
