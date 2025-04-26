@@ -145,8 +145,6 @@ export default function ReviewContributionPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <NavBar title="AIMOS" />
-
       <div className="flex-1 container max-w-md mx-auto mt-20 px-4">
         <div className="rounded-full bg-gray-200 px-6 py-2 text-center text-gray-800 w-fit ml-auto">
           {reviewCount}
