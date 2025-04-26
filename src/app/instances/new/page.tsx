@@ -5,7 +5,6 @@ import type { ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import LabeledInput from "@/components/ui/labeledInput";
 import { NavBar } from "@/components/ui/navbar";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -13,11 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-interface Member {
-  name: string;
-  role: string;
-}
 
 interface Dimension {
   title: string;
@@ -27,23 +21,14 @@ interface Dimension {
 interface NewInstanceDetails {
   name: string;
   description: string;
-  members: Member[];
   dimensions: Dimension[];
 }
 
-// Available roles for members (excluding Owner as it's only for instance creator)
-const AVAILABLE_ROLES = ["Manager", "Reviewer", "Metaviewer"];
-
 export default function NewInstance() {
- 
   const [newMemberEmail, setNewMemberEmail] = useState<string>("");
   const [details, setDetails] = useState<NewInstanceDetails>({
     name: "",
     description: "",
-    members: [
-      { name: "Coops", role: "Owner" },
-      { name: "Alex", role: "Reviewer" },
-    ],
     dimensions: [
       { title: "Mission", description: "lorem ipsum" },
       { title: "Gratitude", description: "" },
@@ -53,27 +38,6 @@ export default function NewInstance() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Instance details:", details);
-  };
-
-  const handleAddMember = () => {
-    if (newMemberEmail) {
-      setDetails((prev) => ({
-        ...prev,
-        members: [...prev.members, { name: newMemberEmail, role: "Reviewer" }],
-      }));
-      // Reset email input after adding
-      setNewMemberEmail("");
-      // TODO: In the future, this would trigger sending an email to the user
-    }
-  };
-
-  const handleRoleChange = (memberName: string, newRole: string) => {
-    setDetails((prev) => ({
-      ...prev,
-      members: prev.members.map((member) =>
-        member.name === memberName ? { ...member, role: newRole } : member
-      ),
-    }));
   };
 
   const handleCancel = () => {
@@ -118,48 +82,6 @@ export default function NewInstance() {
             </div>
 
             <div>
-              <h2 className="text-xl mb-4">Members</h2>
-              <div className="border rounded-md overflow-hidden">
-                {/* Table Headers */}
-                <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 border-b">
-                  <div className="text-lg font-medium">Username</div>
-                  <div className="text-lg font-medium">Role</div>
-                </div>
-                {/* Table Body */}
-                {details.members.map((member) => (
-                  <div
-                    key={`member-${member.name}-${member.role}`}
-                    className="grid grid-cols-2 gap-4 p-4 border-b last:border-b-0 items-center"
-                  >
-                    <div className="text-xl">{member.name}</div>
-                    <Select
-                      value={member.role}
-                      onValueChange={(value) =>
-                        handleRoleChange(member.name, value)
-                      }
-                      disabled={member.role === "Owner"}
-                    >
-                      <SelectTrigger className="bg-gray-50">
-                        <SelectValue>{member.role}</SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {member.role === "Owner" ? (
-                          <SelectItem value="Owner">Owner</SelectItem>
-                        ) : (
-                          AVAILABLE_ROLES.map((role) => (
-                            <SelectItem key={role} value={role}>
-                              {role}
-                            </SelectItem>
-                          ))
-                        )}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
               <h2 className="text-xl mb-4">Dimensions</h2>
               <div className="border rounded-md overflow-hidden">
                 {/* Table Headers */}
@@ -179,30 +101,6 @@ export default function NewInstance() {
                     </div>
                   </div>
                 ))}
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-xl mb-4">Add new member by email</h2>
-              <div className="flex items-center gap-2 w-full">
-                <div className="flex-grow min-w-0">
-                  <Input
-                    id="newMemberEmail"
-                    type="email"
-                    value={newMemberEmail}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setNewMemberEmail(e.target.value)
-                    }
-                    className="w-full"
-                  />
-                </div>
-                <Button
-                  type="button"
-                  className="bg-[#2196F3] hover:bg-[#2196F3]/90 px-8 rounded-lg shrink-0"
-                  onClick={handleAddMember}
-                >
-                  Add
-                </Button>
               </div>
             </div>
 

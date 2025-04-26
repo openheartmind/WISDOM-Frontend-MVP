@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useSearchParams } from "next/navigation"
 
 interface LoginCredentials {
   email: string
@@ -14,6 +15,21 @@ export default function LoginForm() {
     email: "",
     password: "",
   })
+  const [verified, setVerified] = useState<string>()
+
+  const param = useSearchParams();
+  useEffect(() => {
+    if (param) {
+      if (param.get('verified') as string === 'true') {
+        setVerified('true')
+      } else if (param.get('verified') as string === 'false') {
+        setVerified('false')
+      } else {
+        setVerified('')
+      }
+    }
+  }, [param])
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -93,6 +109,11 @@ export default function LoginForm() {
             <Button type="submit" className="flex-1 bg-[#2196F3] hover:bg-[#2196F3]/90">
               Login
             </Button>
+          </div>
+          <div>
+            {verified === 'false' ?
+              <div className="text-red-700 text-sm justify-self-center">User verification failed, please contact an administrator</div> : verified === 'true' ?
+                <div className="text-green-500 text-sm justify-self-center">User has been verified successfully !</div> : null}
           </div>
         </form>
       </div>
