@@ -62,13 +62,10 @@ export default function UpdateProfile() {
   }
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg">
-      <div className="flex items-center gap-4 mb-6">
-        <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">Logo</div>
-        <h1 className="text-xl font-medium">Update Details</h1>
-      </div>
+    <div className="flex min-h-screen flex-col w-full max-w-md mx-auto px-4 py-6 mt-16">
+      
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 ">
         <div>
           <Label htmlFor="email" className="text-sm font-normal">
             Email

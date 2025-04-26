@@ -18,7 +18,6 @@ interface UserDetails {
 
 export default function RegistrationForm() {
   const [isLoading, setLoading] = useState(true)
-  const [title] = useState<string>('New User')
   const [agreementAcceptance, setAgreementAcceptance] = useState<boolean>(false)
   const [termsAndConditions, setTermsAndConditions] = useState<string>()
   const [details, setDetails] = useState<UserDetails>({
@@ -64,13 +63,10 @@ export default function RegistrationForm() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-8">
-        {/* Navigation Bar */}
-        <NavBar title={title} />
-
+    <div className="flex min-h-screen flex-col items-center mt-20">
+      <div className="w-full max-w-md ">
         {/* Form Section */}
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-6">
             <LabeledInput
               fullWidth={false}

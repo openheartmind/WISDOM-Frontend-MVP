@@ -25,7 +25,7 @@ interface NewInstanceDetails {
 }
 
 export default function NewInstance() {
-  const [title] = useState<string>("New Instance");
+  const [newMemberEmail, setNewMemberEmail] = useState<string>("");
   const [details, setDetails] = useState<NewInstanceDetails>({
     name: "",
     description: "",
@@ -46,8 +46,7 @@ export default function NewInstance() {
 
   return (
     <>
-      <NavBar title={title} />
-      <div className="flex min-h-screen flex-col w-full max-w-md mx-auto px-4 py-6 mt-16">
+      <div className="flex min-h-screen flex-col w-full max-w-md mx-auto px-4 py-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-6">
             <div>

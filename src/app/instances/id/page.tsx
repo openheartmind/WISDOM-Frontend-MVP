@@ -9,7 +9,6 @@ import { ArrowRightFromLine } from "lucide-react";
 import getData from "../../table/page";
 
 export default function Instances() {
-  const [title] = useState<string>("Meta-Science");
   const [data, setData] = useState<Payment[]>([]);
 
   useEffect(() => {
@@ -27,8 +26,6 @@ export default function Instances() {
 
   return (
     <div className="flex min-h-screen flex-row justify-center p-4">
-      <NavBar title={title} role={"admin"} />
-
       <div className="w-full max-w-md mt-20">
         <div className="mx-auto py-2 flex flex-col flex-1 justify-between">
           <div className="text-lg font-bold p-3">Members</div>
