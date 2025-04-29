@@ -26,7 +26,7 @@ export default function Instances() {
 
   return (
     <div className="flex min-h-screen flex-row justify-center p-4">
-      <div className="w-full max-w-md mt-20">
+      <div className="w-full max-w-md mt-3">
         <div className="mx-auto py-2 flex flex-col flex-1 justify-between">
           <div className="text-lg font-bold p-3">Members</div>
           <DataTable columns={columns} data={data} />
@@ -37,7 +37,7 @@ export default function Instances() {
           <DataTable columns={columns} data={data} />
         </div>
 
-        <div className="flex flex-col space-y-6 justify-self-center w-60 h-fit">
+        <div className="flex flex-col space-y-6 mt-10 justify-self-center w-60 h-fit">
           <div className="flex">
             <Button
               type="submit"

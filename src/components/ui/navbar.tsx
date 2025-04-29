@@ -40,6 +40,8 @@ const NavBar = () => {
       return { title: "Meta-Science", role: Roles.Admin };
     } else if (path === "/instances/new") {
       return { title: "New Instance", role: Roles.Creator };
+    } else if (path === "/instances/id") {
+      return { title: "Instance Name", role: Roles.Creator };
     } else if (path === "/instances/id/update") {
       return { title: "Instance Update", role: Roles.Creator };
     } else if (path === "/registration") {
