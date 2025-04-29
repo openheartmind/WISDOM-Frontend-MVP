@@ -143,7 +143,7 @@ export default function LoginForm() {
               variant="outline"
               className="flex-1 text-[#2196F3] border-[#2196F3] hover:bg-[#2196F3]/10"
               onClick={() => {
-                window.location.href = "/signup";
+                window.location.href = "/registration";
               }}
             >
               New User
