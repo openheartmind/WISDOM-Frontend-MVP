@@ -33,7 +33,7 @@ export default function RegistrationForm() {
     if (isLoading) {
       fetch("/api/terms", {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'text/plain',
           'Accept': 'text/plain'
         }
       }).then(async (res) => await res.text()).then((data: string) => {
