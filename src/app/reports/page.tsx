@@ -27,8 +27,6 @@ export default function Reports() {
 
   return (
     <div className="flex min-h-screen flex-row justify-center p-4">
-      <NavBar title={title} />
-
       <div className="w-full max-w-md mt-20">
 
         <div className="mx-auto py-2 flex flex-col flex-1 justify-between">
