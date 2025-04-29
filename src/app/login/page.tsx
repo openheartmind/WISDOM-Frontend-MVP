@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useSearchParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 
 interface LoginCredentials {
@@ -10,14 +12,32 @@ interface LoginCredentials {
   password: string;
 }
 
+interface ApiResponse {
+  status: number;
+  data: {
+    status?: number;
+    success?: boolean;
+    message?: string;
+    details?: string;
+    accessToken?: string;
+    user?: {
+      authId: string;
+      email: string;
+      displayName: string | null;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
+}
+
 export default function LoginForm() {
-  const { login } = useAuth();
-  const router = useRouter();
   const [credentials, setCredentials] = useState<LoginCredentials>({
     email: "",
     password: "",
   });
   const [verified, setVerified] = useState<string>();
+  const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const param = useSearchParams();
   useEffect(() => {
@@ -34,27 +54,37 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setIsSubmitting(true);
+    setIsLoading(true);
+    setApiResponse(null);
 
     try {
-      const success = await login(credentials.email, credentials.password);
+      const response = await fetch("/api/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: credentials.email,
+          password: credentials.password,
+        }),
+      });
 
-      if (success) {
-        router.push("/"); // Redirect to homepage or dashboard
-      } else {
-        setError("Invalid credentials. Please try again.");
-      }
-    } catch (err) {
-      setError("An error occurred during login. Please try again.");
-      console.error(err);
+      const data = await response.json();
+      setApiResponse({
+        status: response.status,
+        data: data,
+      });
+    } catch (error) {
+      setApiResponse({
+        status: 500,
+        data: {
+          message: "Failed to connect to API",
+          details: "Could not connect to the server",
+        },
+      });
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
-  };
-
-  const handleNewUser = () => {
-    router.push("/signup");
   };
 
   return (
@@ -69,12 +99,6 @@ export default function LoginForm() {
 
         {/* Form Section */}
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-              <span className="block sm:inline">{error}</span>
-            </div>
-          )}
-
           <div className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-xl mb-2">
@@ -120,19 +144,84 @@ export default function LoginForm() {
               type="button"
               variant="outline"
               className="flex-1 text-[#2196F3] border-[#2196F3] hover:bg-[#2196F3]/10"
-              onClick={handleNewUser}
-              disabled={isSubmitting}
+              onClick={() => {
+                window.location.href = "/signup";
+              }}
             >
               New User
             </Button>
             <Button
               type="submit"
               className="flex-1 bg-[#2196F3] hover:bg-[#2196F3]/90"
-              disabled={isSubmitting}
+              disabled={isLoading}
             >
-              {isSubmitting ? "Logging in..." : "Login"}
+              {isLoading ? "Logging in..." : "Login"}
             </Button>
           </div>
+
+          {/* API Response Display */}
+          {apiResponse && (
+            <div
+              className={`mt-4 p-4 rounded ${
+                apiResponse.status === 401
+                  ? "bg-red-50 border border-red-200"
+                  : apiResponse.data.success
+                    ? "bg-green-50 border border-green-200"
+                    : "bg-gray-50 border border-gray-200"
+              }`}
+            >
+              <div className="text-sm">
+                <p
+                  className={`font-semibold mb-2 ${
+                    apiResponse.data.status === 401
+                      ? "text-red-700"
+                      : apiResponse.data.success
+                        ? "text-green-700"
+                        : "text-gray-700"
+                  }`}
+                >
+                  Status: {apiResponse.data.status}
+                </p>
+                {apiResponse.data.details && (
+                  <p
+                    className={`font-medium mb-1 ${
+                      apiResponse.data.status === 401
+                        ? "text-red-600"
+                        : apiResponse.data.success
+                          ? "text-green-600"
+                          : "text-gray-600"
+                    }`}
+                  >
+                    {apiResponse.data.details}
+                  </p>
+                )}
+                {apiResponse.data.message && (
+                  <p
+                    className={`text-sm ${
+                      apiResponse.data.status === 401
+                        ? "text-red-500"
+                        : apiResponse.data.success
+                          ? "text-green-500"
+                          : "text-gray-500"
+                    }`}
+                  >
+                    {apiResponse.data.message}
+                  </p>
+                )}
+                {apiResponse.data.success && apiResponse.data.user && (
+                  <div className="mt-2 p-2 bg-white rounded">
+                    <p className="text-gray-600">
+                      User ID: {apiResponse.data.user.authId}
+                    </p>
+                    <p className="text-gray-600">
+                      Email: {apiResponse.data.user.email}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           <div>
             {verified === "false" ? (
               <div className="text-red-700 text-sm justify-self-center">
