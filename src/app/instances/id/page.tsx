@@ -37,7 +37,7 @@ export default function Instances() {
           <DataTable columns={columns} data={data} />
         </div>
 
-        <div className="flex flex-col space-y-6 justify-self-center w-60 fixed bottom-20 h-fit left-0 right-0">
+        <div className="flex flex-col space-y-6 justify-self-center w-60 h-fit">
           <div className="flex">
             <Button
               type="submit"
@@ -71,7 +71,7 @@ export default function Instances() {
             </Button>
           </div>
         </div>
-        <div className="mx-auto absolute right-40 bottom-5">
+        <div className="mt-8 flex justify-end">
           <ArrowRightFromLine className="h-10 w-10" />
         </div>
       </div>
