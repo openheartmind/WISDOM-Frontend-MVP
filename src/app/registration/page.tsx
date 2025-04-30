@@ -105,8 +105,8 @@ export default function RegistrationForm() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center mt-20">
-      <div className="w-full max-w-md ">
+    <div className="flex flex-col items-center m-5 mt-10">
+      <div className="w-full max-w-md">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-6">
             <LabeledInput
