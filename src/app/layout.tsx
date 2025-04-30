@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "WisdOHM",
-  description: "",
+  description: "Free, open-source MVP app for valuing diverse contributions through participatory reviews—enabling fair recognition, reward, and coordination across communities.",
 };
 
 export default function RootLayout({
