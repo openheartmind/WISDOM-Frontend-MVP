@@ -4,8 +4,10 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import LabeledInput from "@/components/ui/labeledInput"
 import LabeledCheckbox from "@/components/ui/labeledcheckbox"
-import { NavBar } from "@/components/ui/navbar"
 import { CustomDialog } from "@/components/ui/customdialog"
+import { redirect } from 'next/navigation';
+import { CustomToastie } from "@/components/ui/customtoastie"
+import { useToast } from "@/hooks/use-toast"
 
 interface UserDetails {
   email: string
@@ -16,9 +18,21 @@ interface UserDetails {
   country: string
 }
 
+interface ApiResponse {
+  status: number;
+  data: {
+    status?: number;
+    success?: boolean;
+    message?: string;
+    details?: string;
+  };
+}
+
 export default function RegistrationForm() {
-  const [isLoading, setLoading] = useState(true)
+  const { toast } = useToast()
+  const [isLoading, setIsLoading] = useState(true)
   const [agreementAcceptance, setAgreementAcceptance] = useState<boolean>(false)
+  const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
   const [termsAndConditions, setTermsAndConditions] = useState<string>()
   const [details, setDetails] = useState<UserDetails>({
     email: "",
@@ -42,30 +56,57 @@ export default function RegistrationForm() {
     }
   }, [isLoading])
 
-  useEffect(() => console.debug(`Checkbox: ${agreementAcceptance}`), [agreementAcceptance])
+  useEffect(() => {
+    apiResponse?.data.success === true ? redirect('/login?new') :
+      apiResponse && CustomToastie(toast, {
+        style: 'red',
+        description: "Server error. User failed to be created",
+      })
+  }, [apiResponse])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsLoading(true)
+    setApiResponse(null);
 
-    // Prepare auth object for the endpoint
-    const authPayload = {
-      email: details.email,
-      display: details.display,
-      password: details.password,
-      fullName: details.fullName,
-      phone: details.phone,
-      country: details.country,
-      timestamp: new Date().toISOString(),
+    try {
+      const response = await fetch("/api/registration", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: details.email,
+          display: details.display,
+          password: details.password,
+          fullName: details.fullName,
+          phone: details.phone,
+          country: details.country,
+          timestamp: new Date().toISOString(),
+        }),
+      });
+
+      const data = await response.json();
+      setApiResponse({
+        status: response.status,
+        data: data,
+      });
+    } catch (error) {
+      setApiResponse({
+        status: 500,
+        data: {
+          message: "Failed to connect to API",
+          details: "Could not connect to the server",
+        },
+      });
+    } finally {
+      setIsLoading(false);
     }
-
-    // Here you would typically send the authPayload to your authentication endpoint
-    console.log("Auth payload ready:", authPayload)
   }
 
   return (
     <div className="flex min-h-screen flex-col items-center mt-20">
       <div className="w-full max-w-md ">
-        {/* Form Section */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-6">
             <LabeledInput
@@ -92,7 +133,7 @@ export default function RegistrationForm() {
               onChange={(e: { target: { value: any } }) =>
                 setDetails((prev) => ({
                   ...prev,
-                  email: e.target.value,
+                  display: e.target.value,
                 }))
               } />
 
@@ -106,7 +147,7 @@ export default function RegistrationForm() {
               onChange={(e: { target: { value: any } }) =>
                 setDetails((prev) => ({
                   ...prev,
-                  email: e.target.value,
+                  password: e.target.value,
                 }))
               } />
 
@@ -116,11 +157,11 @@ export default function RegistrationForm() {
               type="text"
               label="Full Name"
               isRequired={false}
-              value={details.display}
+              value={details.fullName}
               onChange={(e: { target: { value: any } }) =>
                 setDetails((prev) => ({
                   ...prev,
-                  email: e.target.value,
+                  fullName: e.target.value,
                 }))
               } />
 
@@ -130,12 +171,13 @@ export default function RegistrationForm() {
               type="text"
               label="Phone"
               isRequired={false}
-              value={details.display}
+              value={details.phone}
               onChange={(e: { target: { value: any } }) =>
-                setDetails((prev) => ({
-                  ...prev,
-                  email: e.target.value,
-                }))
+                !isNaN(e.target.value) ?
+                  setDetails((prev) => ({
+                    ...prev,
+                    phone: e.target.value,
+                  })) : null
               } />
 
             <LabeledInput
@@ -144,11 +186,11 @@ export default function RegistrationForm() {
               type="text"
               label="Country"
               isRequired={false}
-              value={details.display}
+              value={details.country}
               onChange={(e: { target: { value: any } }) =>
                 setDetails((prev) => ({
                   ...prev,
-                  email: e.target.value,
+                  country: e.target.value,
                 }))
               } />
           </div>
@@ -172,8 +214,8 @@ export default function RegistrationForm() {
             >
               Cancel
             </Button>
-            <Button type="submit" className="flex-1 bg-[#2196F3] hover:bg-[#2196F3]/90">
-              Next
+            <Button type="submit" disabled={!agreementAcceptance} className="flex-1 bg-[#2196F3] hover:bg-[#2196F3]/90">
+              Create
             </Button>
           </div>
         </form>
