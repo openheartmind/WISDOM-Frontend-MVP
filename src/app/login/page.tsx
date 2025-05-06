@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 interface LoginCredentials {
   email: string;
@@ -36,8 +37,19 @@ export default function LoginForm() {
   const [verified, setVerified] = useState<string>();
   const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { setAuth, isAuthenticated } = useAuth();
 
   const param = useSearchParams();
+
+  // Redirect to home if already logged in
+  useEffect(() => {
+    if (isAuthenticated) {
+      console.log("User already logged in, redirecting to home");
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
+
   useEffect(() => {
     if (param) {
       if ((param.get("verified") as string) === "true") {
@@ -68,11 +80,44 @@ export default function LoginForm() {
       });
 
       const data = await response.json();
+
       setApiResponse({
         status: response.status,
         data: data,
       });
+
+      // Handle successful login - accept both 200 and 201 status codes
+      if (
+        (response.status === 200 || response.status === 201) &&
+        data.accessToken
+      ) {
+        // Extract user data from the response
+        const userData = data.user || {
+          authId: data.authId || data.userId || data.id,
+          email: data.email || credentials.email,
+          displayName: data.displayName || data.username || null,
+          createdAt: data.createdAt || new Date().toISOString(),
+          updatedAt: data.updatedAt || new Date().toISOString(),
+        };
+
+        // Store token and user data in the auth context
+        setAuth(data.accessToken, userData);
+
+        console.log("Auth data being stored:", {
+          token: data.accessToken,
+          user: userData,
+        });
+        // Redirect to the home page
+        router.push("/");
+      } else {
+        console.log("Login failed:", data.message || "Unknown error");
+        console.log("Missing required data:", {
+          status: response.status,
+          hasAccessToken: !!data.accessToken,
+        });
+      }
     } catch (error) {
+      console.error("API request error:", error);
       setApiResponse({
         status: 500,
         data: {
@@ -156,69 +201,6 @@ export default function LoginForm() {
               {isLoading ? "Logging in..." : "Login"}
             </Button>
           </div>
-
-          {/* API Response Display */}
-          {apiResponse && (
-            <div
-              className={`mt-4 p-4 rounded ${
-                apiResponse.status === 401
-                  ? "bg-red-50 border border-red-200"
-                  : apiResponse.data.success
-                    ? "bg-green-50 border border-green-200"
-                    : "bg-gray-50 border border-gray-200"
-              }`}
-            >
-              <div className="text-sm">
-                <p
-                  className={`font-semibold mb-2 ${
-                    apiResponse.data.status === 401
-                      ? "text-red-700"
-                      : apiResponse.data.success
-                        ? "text-green-700"
-                        : "text-gray-700"
-                  }`}
-                >
-                  Status: {apiResponse.data.status}
-                </p>
-                {apiResponse.data.details && (
-                  <p
-                    className={`font-medium mb-1 ${
-                      apiResponse.data.status === 401
-                        ? "text-red-600"
-                        : apiResponse.data.success
-                          ? "text-green-600"
-                          : "text-gray-600"
-                    }`}
-                  >
-                    {apiResponse.data.details}
-                  </p>
-                )}
-                {apiResponse.data.message && (
-                  <p
-                    className={`text-sm ${
-                      apiResponse.data.status === 401
-                        ? "text-red-500"
-                        : apiResponse.data.success
-                          ? "text-green-500"
-                          : "text-gray-500"
-                    }`}
-                  >
-                    {apiResponse.data.message}
-                  </p>
-                )}
-                {apiResponse.data.success && apiResponse.data.user && (
-                  <div className="mt-2 p-2 bg-white rounded">
-                    <p className="text-gray-600">
-                      User ID: {apiResponse.data.user.authId}
-                    </p>
-                    <p className="text-gray-600">
-                      Email: {apiResponse.data.user.email}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
 
           <div>
             {verified === "false" ? (
