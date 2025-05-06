@@ -2,6 +2,8 @@
 import { ArrowLeft, CogIcon, User } from "lucide-react";
 import * as React from "react";
 import { usePathname, useRouter } from "next/navigation";
+import LOGO from "/public/logo.svg"
+import Image from "next/image";
 
 enum Roles {
   Admin = 'admin',
@@ -82,8 +84,8 @@ const NavBar = () => {
           </div>
           {/* Logo */}
           <div className="w-32 ml-3">
-            <div className="w-full rounded-full size-20 bg-gray-100 flex items-center justify-center">
-              <span className="text-3xl">Logo</span>
+            <div className="w-full size-20 flex items-center justify-center">
+              <span className="text-3xl"><Image src={LOGO} alt={""} className='max-w-[70px] max-h-[70px]' /></span>
             </div>
           </div>
           {/* Title */}
