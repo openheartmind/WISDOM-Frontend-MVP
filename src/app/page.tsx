@@ -11,7 +11,6 @@ import { useAuth } from "@/context/AuthContext";
 export default function Home() {
   const [title] = useState<string>("Welcome!");
   const [data, setData] = useState<Payment[]>([]);
-  const { isAuthenticated, user, token } = useAuth();
 
   // Data loading for the table
   useEffect(() => {
