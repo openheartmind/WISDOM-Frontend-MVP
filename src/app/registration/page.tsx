@@ -57,7 +57,7 @@ export default function RegistrationForm() {
   }, [isLoading])
 
   useEffect(() => {
-    apiResponse?.data.success === true ? redirect('/login?new') :
+    apiResponse && apiResponse?.data.success === true ? redirect('/login?new') :
       apiResponse && CustomToastie(toast, {
         style: 'red',
         description: "Server error. User failed to be created",
