@@ -9,7 +9,7 @@ export async function GET(req: Request) {
       }
     });
     return new Response(data, {
-      status: JSON.stringify(data).toLowerCase().includes("error") ? 500 : 200,
+      status: new RegExp('\\b' + 'error' + '\\b').test(JSON.stringify(data).toLowerCase()) ? 500 : 200,
       headers: { "Content-Type": "text/plain" },
     });
   } catch (error) {

@@ -30,7 +30,6 @@ interface ApiResponse {
 
 export default function RegistrationForm() {
   const { toast } = useToast()
-  const [componentLoaded, setComponentLoaded] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [agreementAcceptance, setAgreementAcceptance] = useState<boolean>(false)
   const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
@@ -45,17 +44,16 @@ export default function RegistrationForm() {
   })
 
   useEffect(() => {
-    if (componentLoaded) {
-      fetch("/api/terms", {
-        headers: {
-          'Content-Type': 'text/plain',
-          'Accept': 'text/plain'
-        }
-      }).then(async (res) => await res.text()).then((data: string) => {
-        setTermsAndConditions(data)
-      });
-    }
-  }, [componentLoaded])
+    fetch("/api/terms", {
+      method: "GET",
+      headers: {
+        'Content-Type': 'text/plain',
+        'Accept': 'text/plain'
+      }
+    }).then(async (res) => await res.text()).then((data: string) => {
+      setTermsAndConditions(data)
+    }).catch(err => console.log(`ERROR: ${err}`));
+  }, [])
 
   useEffect(() => {
     apiResponse && apiResponse?.data.success === true ? redirect('/login?new') :
