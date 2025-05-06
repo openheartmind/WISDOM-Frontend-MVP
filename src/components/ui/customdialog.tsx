@@ -14,11 +14,11 @@ export function CustomDialog({ title, content, children }: { title: string, cont
     return (
         <Dialog>
             <DialogTrigger>{children}</DialogTrigger>
-            <DialogContent>
+            <DialogContent style={{overflowWrap: 'anywhere'}} className="w-full max-w-[95%] h-5/6 overflow-y-auto rounded-lg">
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
-                    <DialogDescription>
-                        <span dangerouslySetInnerHTML={{ __html: `<pre>${content}</pre>` }} />
+                    <DialogDescription className="h-full overflow-y-auto relative text-left">
+                        <span dangerouslySetInnerHTML={{ __html: `<pre style="text-wrap: auto">${content}</pre>` }} />
                     </DialogDescription>
                 </DialogHeader>
             </DialogContent>
