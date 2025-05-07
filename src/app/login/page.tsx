@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import LOGO from "/public/logo.svg"
+import Image from "next/image";
 
 interface LoginCredentials {
   email: string;
@@ -134,9 +136,9 @@ export default function LoginForm() {
     <div className="flex min-h-screen flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
         {/* Logo Section */}
-        <div className="mx-auto w-32 h-32">
-          <div className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center">
-            <span className="text-3xl">Logo</span>
+        <div className="mx-auto">
+          <div className="w-full h-full flex items-center justify-center">
+            <span className="text-3xl"><Image src={LOGO} alt={""} className='w-[250px]' /></span>
           </div>
         </div>
 
@@ -201,6 +203,65 @@ export default function LoginForm() {
               {isLoading ? "Logging in..." : "Login"}
             </Button>
           </div>
+
+          {/* API Response Display */}
+          {apiResponse && (
+            <div
+              className={`mt-4 p-4 rounded ${apiResponse.status === 401
+                  ? "bg-red-50 border border-red-200"
+                  : apiResponse.data.success
+                    ? "bg-green-50 border border-green-200"
+                    : "bg-gray-50 border border-gray-200"
+                }`}
+            >
+              <div className="text-sm">
+                <p
+                  className={`font-semibold mb-2 ${apiResponse.data.status === 401
+                      ? "text-red-700"
+                      : apiResponse.data.success
+                        ? "text-green-700"
+                        : "text-gray-700"
+                    }`}
+                >
+                  Status: {apiResponse.data.status}
+                </p>
+                {apiResponse.data.details && (
+                  <p
+                    className={`font-medium mb-1 ${apiResponse.data.status === 401
+                        ? "text-red-600"
+                        : apiResponse.data.success
+                          ? "text-green-600"
+                          : "text-gray-600"
+                      }`}
+                  >
+                    {apiResponse.data.details}
+                  </p>
+                )}
+                {apiResponse.data.message && (
+                  <p
+                    className={`text-sm ${apiResponse.data.status === 401
+                        ? "text-red-500"
+                        : apiResponse.data.success
+                          ? "text-green-500"
+                          : "text-gray-500"
+                      }`}
+                  >
+                    {apiResponse.data.message}
+                  </p>
+                )}
+                {apiResponse.data.success && apiResponse.data.user && (
+                  <div className="mt-2 p-2 bg-white rounded">
+                    <p className="text-gray-600">
+                      User ID: {apiResponse.data.user.authId}
+                    </p>
+                    <p className="text-gray-600">
+                      Email: {apiResponse.data.user.email}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           <div>
             {verified === "false" ? (
