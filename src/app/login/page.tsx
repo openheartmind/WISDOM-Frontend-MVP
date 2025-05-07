@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSearchParams } from "next/navigation";
-import LOGO from "/public/logo.svg"
+import LOGO from "/logo.svg"
 import Image from "next/image";
 
 interface LoginCredentials {
