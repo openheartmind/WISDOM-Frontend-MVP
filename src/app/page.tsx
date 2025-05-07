@@ -7,10 +7,20 @@ import { useEffect, useState } from "react";
 import getData from "./table/page";
 import { columns, type Payment } from "./table/columns";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [title] = useState<string>("Welcome!");
   const [data, setData] = useState<Payment[]>([]);
+  const router = useRouter();
+  const { setAuth, isAuthenticated } = useAuth();
+
+   // Redirect to home if already logged in
+   useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isAuthenticated, router]);
 
   // Data loading for the table
   useEffect(() => {
