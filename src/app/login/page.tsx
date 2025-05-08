@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import LOGO from "/logo.svg"
 import Image from "next/image";
 
@@ -38,14 +39,27 @@ export default function LoginForm() {
   const [verified, setVerified] = useState<string>();
   const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { setAuth, isAuthenticated } = useAuth();
 
   const param = useSearchParams();
+
+  // Redirect to home if already logged in
+  useEffect(() => {
+    if (isAuthenticated) {
+      console.log("User already logged in, redirecting to home");
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
+
   useEffect(() => {
     if (param) {
       if ((param.get("verified") as string) === "true") {
         setVerified("true");
       } else if ((param.get("verified") as string) === "false") {
         setVerified("false");
+      } else if ((param.get("new") as string) === "") {
+        setVerified("new");
       } else {
         setVerified("");
       }
@@ -70,11 +84,44 @@ export default function LoginForm() {
       });
 
       const data = await response.json();
+
       setApiResponse({
         status: response.status,
         data: data,
       });
+
+      // Handle successful login - accept both 200 and 201 status codes
+      if (
+        (response.status === 200 || response.status === 201) &&
+        data.accessToken
+      ) {
+        // Extract user data from the response
+        const userData = data.user || {
+          authId: data.authId || data.userId || data.id,
+          email: data.email || credentials.email,
+          displayName: data.displayName || data.username || null,
+          createdAt: data.createdAt || new Date().toISOString(),
+          updatedAt: data.updatedAt || new Date().toISOString(),
+        };
+
+        // Store token and user data in the auth context
+        setAuth(data.accessToken, userData);
+
+        console.log("Auth data being stored:", {
+          token: data.accessToken,
+          user: userData,
+        });
+        // Redirect to the home page
+        router.push("/");
+      } else {
+        console.log("Login failed:", data.message || "Unknown error");
+        console.log("Missing required data:", {
+          status: response.status,
+          hasAccessToken: !!data.accessToken,
+        });
+      }
     } catch (error) {
+      console.error("API request error:", error);
       setApiResponse({
         status: 500,
         data: {
@@ -226,6 +273,10 @@ export default function LoginForm() {
             ) : verified === "true" ? (
               <div className="text-green-500 text-sm justify-self-center">
                 User has been verified successfully !
+              </div>
+            ) : verified === "new" ? (
+              <div className="text-red-900 text-sm justify-self-center">
+                Registered successfully! Please check your email for verification..
               </div>
             ) : null}
           </div>

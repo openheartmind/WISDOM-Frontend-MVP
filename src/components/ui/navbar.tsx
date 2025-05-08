@@ -3,16 +3,19 @@ import { ArrowLeft, CogIcon, User } from "lucide-react";
 import * as React from "react";
 import { usePathname, useRouter } from "next/navigation";
 import LOGO from "/logo.svg"
+import { useAuth } from "@/context/AuthContext";
+import { ProfileDropdown } from "@/components/ProfileDropdown";
 import Image from "next/image";
 
 enum Roles {
-  Admin = 'admin',
-  Creator = 'creator'
+  Admin = "admin",
+  Creator = "creator",
 }
 
 const NavBar = () => {
   const pathname = usePathname();
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
 
   // Determine title and role based on pathname
   const getTitleAndRole = (path: string) => {
@@ -24,12 +27,14 @@ const NavBar = () => {
       "/instances/id/update",
       "/registration",
       "/user-detail",
-      "/instances/id/contribution/create"
+      "/instances/id/contribution/create",
     ];
 
     // Check if the current path matches any of our valid paths
-    const isValidPath = validPaths.some(validPath => path.includes(validPath));
-    
+    const isValidPath = validPaths.some((validPath) =>
+      path.includes(validPath)
+    );
+
     // If it's not a valid path, return null to indicate we shouldn't show the navbar
     if (!isValidPath) {
       return null;
@@ -38,19 +43,33 @@ const NavBar = () => {
     // For valid paths, return the appropriate title and role
     if (path === "/") {
       return { title: "OHM", role: Roles.Admin };
-    } else if (path === "/reports") {
+    }
+
+    if (path === "/reports") {
       return { title: "Meta-Science", role: Roles.Admin };
-    } else if (path === "/instances/new") {
+    }
+
+    if (path === "/instances/new") {
       return { title: "New Instance", role: Roles.Creator };
-    } else if (path === "/instances/id") {
+    }
+
+    if (path === "/instances/id") {
       return { title: "Instance Name", role: Roles.Creator };
-    } else if (path === "/instances/id/update") {
+    }
+
+    if (path === "/instances/id/update") {
       return { title: "Instance Update", role: Roles.Creator };
-    } else if (path === "/registration") {
+    }
+
+    if (path === "/registration") {
       return { title: "New User", role: undefined };
-    } else if (path === "/user-detail") {
+    }
+
+    if (path === "/user-detail") {
       return { title: "Update Details", role: Roles.Creator };
-    } else if (path === "/instances/id/contribution/create") {
+    }
+
+    if (path === "/instances/id/contribution/create") {
       return { title: "AIMOS", role: undefined };
     }
 
@@ -59,20 +78,20 @@ const NavBar = () => {
   };
 
   const result = getTitleAndRole(pathname);
-  
+
   // If result is null, don't render the navbar
   if (result === null) {
     return null;
   }
 
   const { title, role } = result;
-  
+
   const handleGoBack = () => {
     router.back();
   };
 
   return (
-    <div>
+    <div className="relative z-10">
       <div className="flex flex-col h-95 items-center my-3">
         <div className="flex flex-row h-95 items-center w-full max-w-md">
           {/* Back Button */}
@@ -95,13 +114,19 @@ const NavBar = () => {
             </label>
           </div>
           {/* Options */}
-          <div className="mx-auto">
-            {role && (role === Roles.Admin ? <CogIcon className="h-10 w-10" /> : <User className="h-10 w-10" />)}
+          <div className="ml-auto flex items-center gap-4 mr-4">
+            {role &&
+              (role === Roles.Admin ? (
+                <CogIcon className="h-8 w-8" />
+              ) : (
+                <User className="h-8 w-8" />
+              ))}
+
+            {/* Auth Profile Dropdown */}
+            <ProfileDropdown />
           </div>
         </div>
       </div>
-      {/* <div className="md:mb-20 mb-15">
-       </div> */}
     </div>
   );
 };
