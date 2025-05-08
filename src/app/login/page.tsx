@@ -58,6 +58,8 @@ export default function LoginForm() {
         setVerified("true");
       } else if ((param.get("verified") as string) === "false") {
         setVerified("false");
+      } else if ((param.get("new") as string) === "") {
+        setVerified("new");
       } else {
         setVerified("");
       }
@@ -271,6 +273,10 @@ export default function LoginForm() {
             ) : verified === "true" ? (
               <div className="text-green-500 text-sm justify-self-center">
                 User has been verified successfully !
+              </div>
+            ) : verified === "new" ? (
+              <div className="text-red-900 text-sm justify-self-center">
+                Registered successfully! Please check your email for verification..
               </div>
             ) : null}
           </div>
