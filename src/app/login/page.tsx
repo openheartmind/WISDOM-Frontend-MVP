@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import LOGO from "/public/logo.svg"
+import LOGO from "/logo.svg"
 import Image from "next/image";
 
 interface LoginCredentials {
