@@ -103,7 +103,7 @@ const NavBar = () => {
           {/* Logo */}
           <div className="w-32 ml-3">
             <div className="w-full size-20 flex items-center justify-center">
-              <span className="text-3xl"><Image src="/logo.svg" alt={""} className='max-w-[70px] max-h-[70px]' /></span>
+              <span className="text-3xl"><Image src="/logo.svg" fill alt={""} className='!relative max-w-[70px] max-h-[70px]' /></span>
             </div>
           </div>
           {/* Title */}

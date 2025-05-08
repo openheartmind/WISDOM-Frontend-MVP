@@ -139,7 +139,7 @@ export default function LoginForm() {
         {/* Logo Section */}
         <div className="mx-auto">
           <div className="w-full h-full flex items-center justify-center">
-            <span className="text-3xl"><Image src="/logo.svg" alt={""} className='w-[250px]' /></span>
+            <span className="text-3xl"><Image src="/logo.svg" alt={""} width={250} height={250} className='!relative w-[250px]' /></span>
           </div>
         </div>
 
