@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import LOGO from "/static/images/logo.svg"
 import Image from "next/image";
 
 interface LoginCredentials {
@@ -140,7 +139,7 @@ export default function LoginForm() {
         {/* Logo Section */}
         <div className="mx-auto">
           <div className="w-full h-full flex items-center justify-center">
-            <span className="text-3xl"><Image src={LOGO} alt={""} className='w-[250px]' /></span>
+            <span className="text-3xl"><Image src="/logo.svg" alt={""} className='w-[250px]' /></span>
           </div>
         </div>
 
