@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { LogOut } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
@@ -40,6 +40,19 @@ export function ProfileDropdown() {
     setShowDropdown((prev) => !prev);
   };
 
+  const handleUserUpdate = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // First close the dropdown
+    setShowDropdown(false);
+
+    // Small delay to ensure the dropdown is closed before navigation
+    setTimeout(() => {
+      router.push("/user-detail");
+    }, 10);
+  };
+
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -58,8 +71,7 @@ export function ProfileDropdown() {
   const getUserInitials = () => {
     if (!user || !user.email) return "?";
 
-    // Get first letter of email
-    return user.email.charAt(0).toUpperCase();
+    return user.displayName?.charAt(0).toUpperCase() || user.email.charAt(0).toUpperCase();
   };
 
   // Don't render anything if not authenticated
@@ -87,8 +99,18 @@ export function ProfileDropdown() {
           <div className="py-2">
             {/* User Email */}
             <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
-              {user?.email}
+              {user?.displayName || user?.email}
             </div>
+
+            {/* Logout Button */}
+            <button
+              type="button"
+              onClick={handleUserUpdate}
+              className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            >
+              <User className="h-4 w-4 mr-2" />
+              Profile Update
+            </button>
 
             {/* Logout Button */}
             <button

@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "WisdOHM",
+  title: process.env.NEXT_PUBLIC_APP_TITLE,
   description: "Free, open-source MVP app for valuing diverse contributions through participatory reviews—enabling fair recognition, reward, and coordination across communities.",
 };
 

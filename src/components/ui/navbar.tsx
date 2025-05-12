@@ -1,89 +1,144 @@
 "use client";
-import { ArrowLeft, CogIcon, User } from "lucide-react";
-import * as React from "react";
+import { ArrowLeftToLine, CogIcon, User } from "lucide-react";
+import { ReactElement, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { ProfileDropdown } from "@/components/ProfileDropdown";
 import Image from "next/image";
 
+const APP_TITLE = process.env.NEXT_PUBLIC_APP_TITLE
+const TITLE_CHAR_LIMIT = 18
+const GUID_PATTERN = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$', 'i')
+
+
+interface Role {
+  roleId: string;
+  roleTitle: string;
+}
+
 enum Roles {
-  Admin = "admin",
-  Creator = "creator",
+  Admin = 'admin',
+  Creator = 'creator',
+  Reviewer = 'reviewer',
+  MetaReviewer = 'metareviewer',
+}
+
+interface ApiResponse {
+  createdAt?: string;
+  createdBy?: string;
+  description?: string;
+  id?: string;
+  title?: string;
+  updatedAt?: string;
 }
 
 const NavBar = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
 
-  // Determine title and role based on pathname
-  const getTitleAndRole = (path: string) => {
-    // Define the paths for which we have created pages
+  const spinner = <div role="status">
+    <svg aria-hidden="true" className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+      <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+    </svg>
+  </div>
+
+  const { isAuthenticated, token } = useAuth();
+  const [role, setRole] = useState<Role | null>({ roleId: 'blah', roleTitle: Roles.Admin });
+  const [instanceTitle, setInstanceTitle] = useState<string>('');
+  const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
+  const screensPath = {
+    login: '/login',
+    instancesList: '/',
+    newUser: '/registration',
+    userUpdate: '/user-detail',
+    Instance: '/instances/[id]',
+    InstanceCreation: '/instances/new',
+    InstanceUpdate: '/instances/[id]/update',
+    InstanceContributionsReview: '/instances/[id]/contribution/review',
+    InstanceNewContribution: '/instances/[id]/contribution/create',
+    InstanceReports: '/instances/[id]/reports',
+  }
+
+  useEffect(() => {
+    if (!apiResponse && pathname.toLowerCase().includes('instances/')) {
+      const instanceId = pathname.toLowerCase().replace('instances/', '').split('/').slice(1, 2)
+      if (instanceId.length !== 1) {
+        throw Error("Failed getting instance id from path")
+      } else {
+        fetch(`/api/instanceInfo?id=${instanceId[0]}`, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        }).then(async (res) => await res.json()).then((data: ApiResponse) => {
+          setApiResponse(data);
+          setInstanceTitle(data.title || '')
+        }).catch(err => console.log(`ERROR: ${err}`));
+      }
+    }
+  }, [pathname, apiResponse])
+
+  const setScreenTitle = (path: string) => {
     const validPaths = [
-      "/",
-      "/reports",
-      "/instances/new",
-      "/instances/id/update",
-      "/registration",
-      "/user-detail",
-      "/instances/id/contribution/create",
+      screensPath.instancesList,
+      screensPath.newUser,
+      screensPath.userUpdate,
+      screensPath.InstanceReports,
+      screensPath.Instance.split('/').slice(0, 2).join('/'),
     ];
 
-    // Check if the current path matches any of our valid paths
     const isValidPath = validPaths.some((validPath) =>
       path.includes(validPath)
     );
 
-    // If it's not a valid path, return null to indicate we shouldn't show the navbar
     if (!isValidPath) {
       return null;
     }
-
-    // For valid paths, return the appropriate title and role
-    if (path === "/") {
-      return { title: "OHM", role: Roles.Admin };
+    function classify(val: string) {
+      const res = val.includes('/instances') && val.split('/').length > 2
+        ? GUID_PATTERN.test(val.split('/')[2])
+          ? (val.split('/').map((val, idx) => idx === 2 ? '[id]' : val).join('/'))
+          : router.push('/error')   // if under instances BUT invalid GUID, error
+        : val
+      return res
     }
+    switch (classify(path)) {
+      case screensPath.instancesList:
+        return { title: APP_TITLE }
 
-    if (path === "/reports") {
-      return { title: "Meta-Science", role: Roles.Admin };
+      case screensPath.newUser:
+        return { title: "New User" };
+
+      case screensPath.userUpdate:
+        return { title: "Update Details" };
+
+      case screensPath.Instance:
+      case screensPath.InstanceUpdate:
+      case screensPath.InstanceNewContribution:
+      case screensPath.InstanceReports:
+      case screensPath.InstanceCreation:
+        return { title: instanceTitle.length > TITLE_CHAR_LIMIT ? `${instanceTitle.slice(0, TITLE_CHAR_LIMIT)}..` : instanceTitle };
+
+      default:
+        return null;
     }
-
-    if (path === "/instances/new") {
-      return { title: "New Instance", role: Roles.Creator };
-    }
-
-    if (path === "/instances/id") {
-      return { title: "Instance Name", role: Roles.Creator };
-    }
-
-    if (path === "/instances/id/update") {
-      return { title: "Instance Update", role: Roles.Creator };
-    }
-
-    if (path === "/registration") {
-      return { title: "New User", role: undefined };
-    }
-
-    if (path === "/user-detail") {
-      return { title: "Update Details", role: Roles.Creator };
-    }
-
-    if (path === "/instances/id/contribution/create") {
-      return { title: "AIMOS", role: undefined };
-    }
-
-    // Default case - unhandled pages
-    return null;
   };
 
-  const result = getTitleAndRole(pathname);
+  const result = setScreenTitle(pathname);
 
   // If result is null, don't render the navbar
   if (result === null) {
     return null;
   }
 
-  const { title, role } = result;
+  const { title } = result;
+
+  const handleIsntanceSettings = () => {
+    router.push(`${pathname}/update`)
+  };
 
   const handleGoBack = () => {
     router.back();
@@ -93,13 +148,13 @@ const NavBar = () => {
     <div className="relative z-10">
       <div className="flex flex-col h-95 items-center my-3">
         <div className="flex flex-row h-95 items-center w-full max-w-md">
-          {/* Back Button */}
-          <div className="w-10 flex items-center justify-center ml-2">
-            <ArrowLeft
-              className="h-6 w-6 cursor-pointer"
-              onClick={handleGoBack}
-            />
-          </div>
+          {pathname === screensPath.instancesList ? null :
+            <div className="flex items-center justify-center ml-2 absolute">
+              <ArrowLeftToLine
+                className="h-6 w-6 cursor-pointer"
+                onClick={handleGoBack}
+              />
+            </div>}
           {/* Logo */}
           <div className="w-32 ml-3">
             <div className="w-full size-20 flex items-center justify-center">
@@ -107,22 +162,31 @@ const NavBar = () => {
             </div>
           </div>
           {/* Title */}
-          <div className="flex flex-left ml-10 justify-center">
-            <label htmlFor="title" className="block text-3xl mb-2 pr-7">
-              {title}
-            </label>
-          </div>
+          {title === '' ?
+            <div className="flex flex-1 justify-center">
+              {spinner}
+            </div> :
+            <div className="flex flex-left">
+              <label htmlFor="title" className="block text-3xl mb-2 pr-7">
+                {title}
+              </label>
+            </div>
+          }
           {/* Options */}
           <div className="ml-auto flex items-center gap-4 mr-4">
-            {role &&
-              (role === Roles.Admin ? (
-                <CogIcon className="h-8 w-8" />
-              ) : (
-                <User className="h-8 w-8" />
-              ))}
+            {
+              pathname.includes('/instances') && pathname.split('/').length == 3
+              &&
+              role &&
+              (role.roleTitle === Roles.Admin || role.roleTitle === Roles.Creator) &&
+              <CogIcon className="h-8 w-8" onClick={handleIsntanceSettings} />
+            }
 
             {/* Auth Profile Dropdown */}
-            <ProfileDropdown />
+            {
+              pathname === screensPath.instancesList &&
+              <ProfileDropdown />
+            }
           </div>
         </div>
       </div>
