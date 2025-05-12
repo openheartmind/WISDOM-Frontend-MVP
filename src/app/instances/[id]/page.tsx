@@ -2,10 +2,8 @@
 
 import { DataTable } from "@/app/table/data-table";
 import { Button } from "@/components/ui/button";
-import { NavBar } from "@/components/ui/navbar";
 import { useEffect, useState } from "react";
 import { columns, type Payment } from "../../table/columns";
-import { ArrowRightFromLine } from "lucide-react";
 import getData from "../../table/page";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
@@ -76,9 +74,6 @@ export default function Instances() {
               Reports
             </Button>
           </div>
-        </div>
-        <div className="mt-8 flex justify-end">
-          <ArrowRightFromLine className="h-10 w-10" />
         </div>
       </div>
     </div>

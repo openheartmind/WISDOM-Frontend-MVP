@@ -6,7 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 import { ProfileDropdown } from "@/components/ProfileDropdown";
 import Image from "next/image";
 
-const APP_TITLE = process.env.NEXT_PUBLIC_APP_TITLE
+const APP_TITLE = process.env.NEXT_PUBLIC_APP_TITLE || ''
 const TITLE_CHAR_LIMIT = 18
 const GUID_PATTERN = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$', 'i')
 
@@ -61,10 +61,11 @@ const NavBar = () => {
   }
 
   useEffect(() => {
-    if (!apiResponse && pathname.toLowerCase().includes('instances/')) {
+    if (!apiResponse && pathname.toLowerCase().includes('instances/') && pathname !== screensPath.InstanceCreation) {
       const instanceId = pathname.toLowerCase().replace('instances/', '').split('/').slice(1, 2)
-      if (instanceId.length !== 1) {
-        throw Error("Failed getting instance id from path")
+      if (instanceId.length !== 1 || (instanceId.length === 1 && !GUID_PATTERN.test(instanceId[0]))) {
+        console.log("Failed getting instance id from path")
+        router.push('/error')
       } else {
         fetch(`/api/instanceInfo?id=${instanceId[0]}`, {
           method: "GET",
@@ -81,18 +82,23 @@ const NavBar = () => {
     }
   }, [pathname, apiResponse])
 
-  const setScreenTitle = (path: string) => {
+  const setScreenTitle = (path: string): string | null => {
     const validPaths = [
       screensPath.instancesList,
       screensPath.newUser,
       screensPath.userUpdate,
       screensPath.InstanceReports,
-      screensPath.Instance.split('/').slice(0, 2).join('/'),
+      screensPath.InstanceCreation,
+      screensPath.Instance,
+      screensPath.InstanceUpdate,
+      screensPath.InstanceContributionsReview,
+      screensPath.InstanceNewContribution,
     ];
 
-    const isValidPath = validPaths.some((validPath) =>
-      path.includes(validPath)
-    );
+    const isValidPath = validPaths.some((validPath) => {
+      const validationCheck = path.includes('instance') ? path.split('/').map((val, idx) => idx === 2 ? '[id]' : val).join('/') : path
+      return validationCheck === validPath
+    });
 
     if (!isValidPath) {
       return null;
@@ -101,40 +107,37 @@ const NavBar = () => {
       const res = val.includes('/instances') && val.split('/').length > 2
         ? GUID_PATTERN.test(val.split('/')[2])
           ? (val.split('/').map((val, idx) => idx === 2 ? '[id]' : val).join('/'))
-          : router.push('/error')   // if under instances BUT invalid GUID, error
+          : val.split('/')[2] !== 'new' ? router.push('/error') : val   // if under instances BUT invalid GUID, error
         : val
       return res
     }
     switch (classify(path)) {
       case screensPath.instancesList:
-        return { title: APP_TITLE }
+      case screensPath.InstanceCreation:
+        return APP_TITLE
 
       case screensPath.newUser:
-        return { title: "New User" };
+        return "New User"
 
       case screensPath.userUpdate:
-        return { title: "Update Details" };
+        return "Profile Update"
 
       case screensPath.Instance:
       case screensPath.InstanceUpdate:
       case screensPath.InstanceNewContribution:
       case screensPath.InstanceReports:
-      case screensPath.InstanceCreation:
-        return { title: instanceTitle.length > TITLE_CHAR_LIMIT ? `${instanceTitle.slice(0, TITLE_CHAR_LIMIT)}..` : instanceTitle };
+        return instanceTitle
 
       default:
-        return null;
+        return '';
     }
   };
 
-  const result = setScreenTitle(pathname);
+  let title = setScreenTitle(pathname);
+  title = title && title.length > TITLE_CHAR_LIMIT ? `${title?.slice(0, TITLE_CHAR_LIMIT)}..` : title;
 
-  // If result is null, don't render the navbar
-  if (result === null) {
+  if (!title)
     return null;
-  }
-
-  const { title } = result;
 
   const handleIsntanceSettings = () => {
     router.push(`${pathname}/update`)
@@ -162,7 +165,7 @@ const NavBar = () => {
             </div>
           </div>
           {/* Title */}
-          {title === '' ?
+          {!title ?
             <div className="flex flex-1 justify-center">
               {spinner}
             </div> :
@@ -175,7 +178,7 @@ const NavBar = () => {
           {/* Options */}
           <div className="ml-auto flex items-center gap-4 mr-4">
             {
-              pathname.includes('/instances') && pathname.split('/').length == 3
+              pathname.includes('/instances') && !pathname.includes('new') && pathname.split('/').length == 3
               &&
               role &&
               (role.roleTitle === Roles.Admin || role.roleTitle === Roles.Creator) &&

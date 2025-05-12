@@ -4,7 +4,6 @@ import { useState } from "react";
 import type { ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import LabeledInput from "@/components/ui/labeledInput";
-import { NavBar } from "@/components/ui/navbar";
 import { Input } from "@/components/ui/input";
 import {
   Select,

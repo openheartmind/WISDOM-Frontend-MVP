@@ -2,7 +2,6 @@
 
 import { DataTable } from "@/app/table/data-table";
 import { Button } from "@/components/ui/button";
-import { NavBar } from "@/components/ui/navbar";
 import { useEffect, useState } from "react";
 import getData from "./table/page";
 import { columns, type Payment } from "./table/columns";

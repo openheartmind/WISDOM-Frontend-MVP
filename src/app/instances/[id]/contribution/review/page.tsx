@@ -1,6 +1,5 @@
 "use client";
 
-import { NavBar } from "@/components/ui/navbar";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, HandHeart } from "lucide-react";
 import { ContributionCard } from "@/components/contribution/contribution-card";
