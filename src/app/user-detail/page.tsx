@@ -2,12 +2,17 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/context/AuthContext"
 
 export default function UpdateProfile() {
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
+
   const [formData, setFormData] = useState({
     email: "",
     displayName: "",
@@ -18,6 +23,9 @@ export default function UpdateProfile() {
     newPassword: "",
   })
 
+  useEffect(() => {
+    !isAuthenticated && router.push('/login');
+  }, [])
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({
@@ -35,9 +43,9 @@ export default function UpdateProfile() {
       // Only include password fields if the user is changing password
       ...(formData.oldPassword && formData.newPassword
         ? {
-            oldPassword: formData.oldPassword,
-            newPassword: formData.newPassword,
-          }
+          oldPassword: formData.oldPassword,
+          newPassword: formData.newPassword,
+        }
         : {}),
     }
 
@@ -63,7 +71,7 @@ export default function UpdateProfile() {
 
   return (
     <div className="flex min-h-screen flex-col w-full max-w-md mx-auto px-4 py-6 mt-16">
-      
+
 
       <form onSubmit={handleSubmit} className="space-y-4 ">
         <div>

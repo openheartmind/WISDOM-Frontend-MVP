@@ -7,11 +7,17 @@ import { useEffect, useState } from "react";
 import { columns, type Payment } from "../../table/columns";
 import { ArrowRightFromLine } from "lucide-react";
 import getData from "../../table/page";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Instances() {
+  const router = useRouter();
   const [data, setData] = useState<Payment[]>([]);
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
+    !isAuthenticated && router.push('/login');
+
     const fetchData = async () => {
       try {
         const result = await getData();
