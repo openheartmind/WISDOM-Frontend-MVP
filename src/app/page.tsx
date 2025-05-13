@@ -8,6 +8,7 @@ import getData from "./table/page";
 import { columns, type Payment } from "./table/columns";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { PlusCircleIcon } from "lucide-react";
 
 export default function Home() {
   const [title] = useState<string>("Welcome!");
@@ -15,8 +16,8 @@ export default function Home() {
   const router = useRouter();
   const { setAuth, isAuthenticated } = useAuth();
 
-   // Redirect to home if already logged in
-   useEffect(() => {
+  // Redirect to login if not authenticated
+  useEffect(() => {
     if (!isAuthenticated) {
       router.push("/login");
     }
@@ -37,18 +38,25 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-row justify-center p-4">
-      <div className="w-full max-w-md space-y-8">
-        <div className="mx-auto py-10 flex flex-col flex-1 justify-between">
-          <div className="text-lg font-bold p-3">Available Instances</div>
+    <div className="flex min-h-screen flex-col px-4 py-6 md:px-6 md:py-8">
+      <div className="w-full max-w-2xl mx-auto flex flex-col min-h-[calc(100vh-3.5rem)]">
+        <div className="mb-6">
+          <h1 className="text-xl md:text-2xl font-bold">Available Instances</h1>
+        </div>
+
+        <div className="bg-white rounded-md shadow-sm border border-gray-200 overflow-auto mb-6">
           <DataTable columns={columns} data={data} />
         </div>
 
-        <div className="flex flex-col justify-self-center w-60 fixed bottom-20 left-0 right-0 ">
+        <div className="flex justify-center mb-6">
           <Button
-            type="submit"
-            className="flex-1 bg-[#2196F3] hover:bg-[#2196F3]/90"
+            type="button"
+            className="h-10 md:h-12 bg-[#f48646] hover:bg-[#f48646]/90 text-sm md:text-base font-medium flex items-center gap-2 px-6 "
+            onClick={() => {
+              // Handle create new instance logic
+            }}
           >
+            <PlusCircleIcon className="w-5 h-5 md:w-6 md:h-6" />
             Create New
           </Button>
         </div>
