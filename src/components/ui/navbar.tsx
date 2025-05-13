@@ -54,7 +54,7 @@ const NavBar = () => {
 
   // Logoff if user isn't authorized
   useEffect(() => {
-    !isAuthenticated && router.push('/login')
+    pathname !== screensPath.newUser && !isAuthenticated && router.push('/login')
   }, [])
 
   // Fetch instance ID if needed
@@ -73,8 +73,12 @@ const NavBar = () => {
             'Authorization': `Bearer ${token}`
           }
         }).then(async (res) => await res.json()).then((data: ApiResponse) => {
-          setApiResponse(data);
-          setInstanceTitle(data.title || '')
+          if ('id' in data  === false) {
+            router.push('/error')
+          } else {
+            setApiResponse(data);
+            setInstanceTitle(data.title || '')
+          }
         }).catch(err => console.log(`ERROR: ${err}`));
       }
     }
