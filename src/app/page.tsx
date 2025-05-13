@@ -3,7 +3,7 @@
 import { DataTable } from "@/app/table/data-table";
 import { Button } from "@/components/ui/button";
 import { NavBar } from "@/components/ui/navbar";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import getData from "./table/page";
 import { columns, type Payment } from "./table/columns";
 import { useAuth } from "@/context/AuthContext";
@@ -15,8 +15,8 @@ export default function Home() {
   const router = useRouter();
   const { setAuth, isAuthenticated } = useAuth();
 
-   // Redirect to home if already logged in
-   useEffect(() => {
+  // Redirect to home if already logged in
+  useEffect(() => {
     if (!isAuthenticated) {
       router.push("/login");
     }
@@ -35,7 +35,9 @@ export default function Home() {
 
     fetchData();
   }, []);
-
+  const handleCreateNewInstance = useCallback(() => {
+    router.push("/instances/new");
+  }, [router]);
   return (
     <div className="flex min-h-screen flex-row justify-center p-4">
       <div className="w-full max-w-md space-y-8">
@@ -48,6 +50,7 @@ export default function Home() {
           <Button
             type="submit"
             className="flex-1 bg-[#2196F3] hover:bg-[#2196F3]/90"
+            onClick={handleCreateNewInstance}
           >
             Create New
           </Button>
