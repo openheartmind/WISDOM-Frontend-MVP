@@ -43,9 +43,7 @@ export default function UpdateProfile() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col w-full max-w-md mx-auto px-10 py-6">
-      
-
+    <div className="flex min-h-[calc(100vh-150px)] flex-col w-full max-w-md mx-auto px-10 py-6 relative">
       <form onSubmit={handleSubmit} className="space-y-4 ">
         <div>
           <Label htmlFor="email" className="text-sm font-normal">
@@ -102,7 +100,7 @@ export default function UpdateProfile() {
           <Input id="country" name="country" value={formData.country} onChange={handleChange} className="bg-gray-100" />
         </div>
 
-        <div className="flex gap-4 pt-4">
+        <div className="flex gap-4 pt-2 absolute inset-x-0 bottom-0 p-5">
           <Button
             type="button"
             variant="outline"
