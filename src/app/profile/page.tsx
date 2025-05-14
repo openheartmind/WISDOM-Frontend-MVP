@@ -14,8 +14,6 @@ export default function UpdateProfile() {
     fullName: "",
     phone: "",
     country: "",
-    oldPassword: "",
-    newPassword: "",
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,21 +27,6 @@ export default function UpdateProfile() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Prepare the JSON object to be sent to the backend
-    const updateData = {
-      ...formData,
-      // Only include password fields if the user is changing password
-      ...(formData.oldPassword && formData.newPassword
-        ? {
-            oldPassword: formData.oldPassword,
-            newPassword: formData.newPassword,
-          }
-        : {}),
-    }
-
-    // Here you would typically send the data to your backend
-    console.log("Data to be sent to backend:", updateData)
-
     // Example of how you might call your API
     // updateUserDetails(updateData)
   }
@@ -56,26 +39,24 @@ export default function UpdateProfile() {
       fullName: "",
       phone: "",
       country: "",
-      oldPassword: "",
-      newPassword: "",
     })
   }
 
   return (
-    <div className="flex min-h-screen flex-col w-full max-w-md mx-auto px-4 py-6 mt-16">
+    <div className="flex min-h-screen flex-col w-full max-w-md mx-auto px-10 py-6">
       
 
       <form onSubmit={handleSubmit} className="space-y-4 ">
         <div>
           <Label htmlFor="email" className="text-sm font-normal">
-            Email
+            Email (Username)
           </Label>
           <Input
             id="email"
             name="email"
             type="email"
+            disabled={true}
             value={formData.email}
-            onChange={handleChange}
             className="bg-gray-100"
           />
         </div>
@@ -119,40 +100,6 @@ export default function UpdateProfile() {
             Country
           </Label>
           <Input id="country" name="country" value={formData.country} onChange={handleChange} className="bg-gray-100" />
-        </div>
-
-        <div className="pt-2">
-          <p className="text-sm font-normal mb-2">Change Password</p>
-
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="oldPassword" className="text-sm font-normal">
-                Old Password <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="oldPassword"
-                name="oldPassword"
-                type="password"
-                value={formData.oldPassword}
-                onChange={handleChange}
-                className="bg-gray-100"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="newPassword" className="text-sm font-normal">
-                New Password <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="newPassword"
-                name="newPassword"
-                type="password"
-                value={formData.newPassword}
-                onChange={handleChange}
-                className="bg-gray-100"
-              />
-            </div>
-          </div>
         </div>
 
         <div className="flex gap-4 pt-4">

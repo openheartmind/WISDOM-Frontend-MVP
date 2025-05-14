@@ -25,7 +25,7 @@ const NavBar = () => {
       "/instances/new",
       "/instances/id/update",
       "/registration",
-      "/user-detail",
+      "/profile",
       "/instances/id/contribution/create",
     ];
 
@@ -64,7 +64,7 @@ const NavBar = () => {
       return { title: "New User", role: undefined };
     }
 
-    if (path === "/user-detail") {
+    if (path === "/profile") {
       return { title: "Update Details", role: Roles.Creator };
     }
 
