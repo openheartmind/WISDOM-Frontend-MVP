@@ -40,8 +40,8 @@ export default function Home() {
     router.push("/instances/new");
   }, [router]);
   return (
-    <div className="flex min-h-screen flex-col px-4 py-6 md:px-6 md:py-8">
-      <div className="w-full max-w-2xl mx-auto flex flex-col min-h-[calc(100vh-3.5rem)]">
+    <div className="flex min-h-screen flex-col px-4 min-h-[calc(100vh-150px)] md:px-6 md:py-8">
+      <div className="w-full max-w-2xl mx-auto flex flex-col">
         <div className="mb-6">
           <h1 className="text-xl md:text-2xl font-bold">Available Instances</h1>
         </div>
@@ -50,7 +50,7 @@ export default function Home() {
           <DataTable columns={columns} data={data} />
         </div>
 
-        <div className="flex justify-center mb-6">
+        <div className="flex gap-4 pt-2 absolute inset-x-0 bottom-0 p-5 justify-center mb-6">
           <Button
             type="button"
             className="h-10 md:h-12 bg-[#f48646] hover:bg-[#f48646]/90 text-sm md:text-base font-medium flex items-center gap-2 px-6 "
