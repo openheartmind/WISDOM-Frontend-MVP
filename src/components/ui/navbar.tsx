@@ -2,7 +2,6 @@
 import { ArrowLeft, CogIcon, User } from "lucide-react";
 import * as React from "react";
 import { usePathname, useRouter } from "next/navigation";
-import LOGO from "/logo.svg"
 import { useAuth } from "@/context/AuthContext";
 import { ProfileDropdown } from "@/components/ProfileDropdown";
 import Image from "next/image";
@@ -104,7 +103,7 @@ const NavBar = () => {
           {/* Logo */}
           <div className="w-32 ml-3">
             <div className="w-full size-20 flex items-center justify-center">
-              <span className="text-3xl"><Image src={LOGO} alt={""} className='max-w-[70px] max-h-[70px]' /></span>
+              <span className="text-3xl"><Image src="/logo.svg" fill alt={""} className='!relative max-w-[70px] max-h-[70px]' /></span>
             </div>
           </div>
           {/* Title */}
