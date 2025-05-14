@@ -3,7 +3,7 @@
 import { DataTable } from "@/app/table/data-table";
 import { Button } from "@/components/ui/button";
 import { NavBar } from "@/components/ui/navbar";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import getData from "./table/page";
 import { columns, type Payment } from "./table/columns";
 import { useAuth } from "@/context/AuthContext";
@@ -16,7 +16,7 @@ export default function Home() {
   const router = useRouter();
   const { setAuth, isAuthenticated } = useAuth();
 
-  // Redirect to login if not authenticated
+  // Redirect to home if already logged in
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/login");
@@ -36,7 +36,9 @@ export default function Home() {
 
     fetchData();
   }, []);
-
+  const handleCreateNewInstance = useCallback(() => {
+    router.push("/instances/new");
+  }, [router]);
   return (
     <div className="flex min-h-screen flex-col px-4 py-6 md:px-6 md:py-8">
       <div className="w-full max-w-2xl mx-auto flex flex-col min-h-[calc(100vh-3.5rem)]">
@@ -52,9 +54,7 @@ export default function Home() {
           <Button
             type="button"
             className="h-10 md:h-12 bg-[#f48646] hover:bg-[#f48646]/90 text-sm md:text-base font-medium flex items-center gap-2 px-6 "
-            onClick={() => {
-              // Handle create new instance logic
-            }}
+            onClick={handleCreateNewInstance}
           >
             <PlusCircleIcon className="w-5 h-5 md:w-6 md:h-6" />
             Create New
