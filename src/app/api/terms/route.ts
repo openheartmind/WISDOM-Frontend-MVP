@@ -1,4 +1,6 @@
-export async function GET(req: Request) {
+import { NextRequest } from "next/server";
+
+export async function GET(req: NextRequest) {
   try {
     const url = new URL(process.env.NEXT_PUBLIC_TERMS_FILENAME as string, process.env.NEXT_PUBLIC_BASEURL).href;
     const data = await fetch(url).then(async (res) => {

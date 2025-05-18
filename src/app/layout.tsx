@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { RenderMounted } from "@/components/ClientRender";
-import { NavBar } from "@/components/ui/navbar";
+import { Navbar } from "@/components/ui/navbar";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -17,8 +17,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "WisdOHM",
-  description: "Free, open-source MVP app for valuing diverse contributions through participatory reviews—enabling fair recognition, reward, and coordination across communities.",
+  title: process.env.NEXT_PUBLIC_APP_TITLE,
+  description:
+    "Free, open-source MVP app for valuing diverse contributions through participatory reviews—enabling fair recognition, reward, and coordination across communities.",
 };
 
 export default function RootLayout({
@@ -33,7 +34,7 @@ export default function RootLayout({
       >
         <RenderMounted>
           <AuthProvider>
-            <NavBar />
+            <Navbar />
             {children}
             <Toaster />
           </AuthProvider>
