@@ -14,8 +14,8 @@ export default function Home() {
   const router = useRouter();
   const { setAuth, isAuthenticated } = useAuth();
 
-   // Redirect to home if already logged in
-   useEffect(() => {
+  // Redirect to home if already logged in
+  useEffect(() => {
     if (!isAuthenticated) {
       router.push("/login");
     }
