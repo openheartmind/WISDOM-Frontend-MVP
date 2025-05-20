@@ -102,23 +102,29 @@ export default function NewInstance() {
                   </div>
                 ))}
               </div>
+
+              <p className="!text-[17px] !font-normal text-center xs:mt- sm:mt-5 md:mt-5 lg:mt-10">
+                Adding members to this instance will be available after creation
+              </p>
             </div>
 
-            <div className="flex gap-4">
-              <Button
-                type="button"
-                variant="outline"
-                className="flex-1 text-[#2196F3] border-[#2196F3] hover:bg-[#2196F3]/10 rounded-lg py-3"
-                onClick={handleCancel}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="flex-1 bg-[#2196F3] hover:bg-[#2196F3]/90 rounded-lg py-3"
-              >
-                Create
-              </Button>
+            <div className="justify-self-center fixed xs:bottom-8 sm:bottom-8 lg:bottom-20 xl:bottom-20 left-0 right-0 w-full max-w-md mx-auto">
+              <div className="flex gap-6">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="flex-1 text-[#2196F3] border-[#2196F3] hover:bg-[#2196F3]/10 rounded-lg py-3"
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="flex-1 bg-[#2196F3] hover:bg-[#2196F3]/90 rounded-lg py-3"
+                >
+                  Create
+                </Button>
+              </div>
             </div>
           </div>
         </form>
