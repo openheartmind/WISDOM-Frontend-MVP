@@ -16,7 +16,15 @@ export async function GET(req: NextRequest) {
       throw Error("Failed getting token from params");
     }
 
-    const data = await fetch(`${url}?${BACKEND_TOKEN_KEY}=${token}`).then(async (res) => {
+    const data = await fetch(`${url}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        hashedToken: token,
+      }),
+    }).then(async (res) => {
       try {
         return await res?.json();
       } catch (err) {
