@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { NextRequest } from "next/server";
 
 const FRONTEND_TOKEN_KEY = process.env.NEXT_PUBLIC_FRONTEND_TOKEN_KEY as string;
-const BACKEND_TOKEN_KEY = process.env.NEXT_PUBLIC_BACKEND_TOKEN_KEY as string;
 
 export async function GET(req: NextRequest) {
   try {
@@ -16,7 +15,7 @@ export async function GET(req: NextRequest) {
       throw Error("Failed getting token from params");
     }
 
-    const data = await fetch(`${url}`, {
+    const data = fetch(`${url}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
