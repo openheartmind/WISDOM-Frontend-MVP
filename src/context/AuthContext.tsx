@@ -12,6 +12,9 @@ interface User {
   authId: string;
   email: string;
   displayName: string | null;
+  fullName?: string;
+  phone?: string;
+  country?: string;
   createdAt: string;
   updatedAt: string;
 }
