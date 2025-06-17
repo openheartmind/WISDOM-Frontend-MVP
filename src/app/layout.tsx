@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { RenderMounted } from "@/components/ClientRender";
-import { Navbar } from "@/components/ui/navbar";
+import { NavBar } from "@/components/ui/navbar";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -34,7 +34,7 @@ export default function RootLayout({
       >
         <RenderMounted>
           <AuthProvider>
-            <Navbar />
+            <NavBar />
             {children}
             <Toaster />
           </AuthProvider>
