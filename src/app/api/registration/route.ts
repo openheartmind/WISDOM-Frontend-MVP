@@ -4,7 +4,7 @@ export async function POST(request: Request) {
   const body = await request.json();
 
   try {
-    if (body.email && body.display && body.password) {
+    if (body.email && body.displayName && body.password) {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/sign-up`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
