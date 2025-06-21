@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast"
 
 interface UserDetails {
   email: string
-  display: string
+  displayName: string
   password: string
   fullName: string
   phone: string
@@ -36,7 +36,7 @@ export default function RegistrationForm() {
   const [termsAndConditions, setTermsAndConditions] = useState<string>()
   const [details, setDetails] = useState<UserDetails>({
     email: "",
-    display: "",
+    displayName: "",
     password: "",
     fullName: "",
     phone: "",
@@ -76,7 +76,7 @@ export default function RegistrationForm() {
         },
         body: JSON.stringify({
           email: details.email,
-          display: details.display,
+          displayName: details.displayName,
           password: details.password,
           fullName: details.fullName,
           phone: details.phone,
@@ -128,11 +128,11 @@ export default function RegistrationForm() {
               type="text"
               label="Display Name"
               isRequired={true}
-              value={details.display}
+              value={details.displayName}
               onChange={(e: { target: { value: any } }) =>
                 setDetails((prev) => ({
                   ...prev,
-                  display: e.target.value,
+                  displayName: e.target.value,
                 }))
               } />
 

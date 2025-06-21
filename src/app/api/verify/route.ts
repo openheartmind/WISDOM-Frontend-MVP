@@ -15,13 +15,13 @@ export async function GET(req: NextRequest) {
       throw Error("Failed getting token from params");
     }
 
-    const data = fetch(`${url}`, {
+    const data = await fetch(`${url}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        hashedToken: token,
+        token,
       }),
     }).then(async (res) => {
       try {
