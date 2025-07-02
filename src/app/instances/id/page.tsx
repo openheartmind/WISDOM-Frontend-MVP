@@ -3,6 +3,7 @@
 import { DataTable } from "@/app/table/data-table";
 import { Button } from "@/components/ui/button";
 import { NavBar } from "@/components/ui/navbar";
+import { redirect } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { columns, type Payment } from "../../table/columns";
 import { ArrowRightFromLine } from "lucide-react";
@@ -11,18 +12,18 @@ import getData from "../../table/page";
 export default function Instances() {
   const [data, setData] = useState<Payment[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getData();
-        setData(result);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const result = await getData();
+  //       setData(result);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   return (
     <div className="flex min-h-screen flex-row justify-center p-4">
@@ -40,6 +41,7 @@ export default function Instances() {
         <div className="flex flex-col space-y-6 mt-10 justify-self-center w-60 h-fit">
           <div className="flex">
             <Button
+              onClick={()=>redirect("/instances/id/contribution/create")}
               type="button"
               className="flex-1 bg-[#2196F3] hover:bg-[#2196F3]/90"
             >
@@ -48,6 +50,7 @@ export default function Instances() {
           </div>
           <div className="flex">
             <Button
+              onClick={()=>redirect("/instances/id/contribution/review")}
               type="button"
               className="flex-1 bg-[#2196F3] hover:bg-[#2196F3]/90"
             >
@@ -56,6 +59,7 @@ export default function Instances() {
           </div>
           <div className="flex">
             <Button
+              onClick={()=>redirect("/instances/id/contribution/review")}
               type="button"
               className="flex-1 bg-[#2196F3] hover:bg-[#2196F3]/90"
             >
@@ -64,6 +68,7 @@ export default function Instances() {
           </div>
           <div className="flex">
             <Button
+              onClick={()=>redirect("/reports")}
               type="button"
               className="flex-1 bg-[#2196F3] hover:bg-[#2196F3]/90"
             >

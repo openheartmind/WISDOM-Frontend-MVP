@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        token,
+        hashedToken: token,
       }),
     }).then(async (res) => {
       try {

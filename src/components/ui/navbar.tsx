@@ -27,6 +27,7 @@ const NavBar = () => {
       "/registration",
       "/profile",
       "/instances/id/contribution/create",
+      "/instances/id/contribution/review",
     ];
 
     // Check if the current path matches any of our valid paths
@@ -72,6 +73,10 @@ const NavBar = () => {
       return { title: "AIMOS", role: undefined };
     }
 
+    if (path === "/instances/id/contribution/review") {
+      return { title: "AIMOS", role: undefined };
+    }
+
     // Default case - unhandled pages
     return null;
   };
@@ -86,7 +91,7 @@ const NavBar = () => {
   const { title, role } = result;
 
   const handleGoBack = () => {
-    router.back();
+    router.push("/");
   };
 
   return (

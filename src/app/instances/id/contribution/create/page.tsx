@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { redirect } from 'next/navigation';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -164,10 +165,10 @@ export default function ContributionForm() {
         </div>
 
         <div className="flex justify-between mt-6">
-          <Button variant="outline" className="border border-blue-500 text-blue-500 px-8">
+          <Button onClick={()=>redirect("/instances/id")} variant="outline" className="border border-blue-500 text-blue-500 px-8">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} className="bg-blue-500 hover:bg-blue-600 text-white px-8">
+          <Button onClick={()=>redirect("/instances/id")} className="bg-blue-500 hover:bg-blue-600 text-white px-8">
             Create
           </Button>
         </div>

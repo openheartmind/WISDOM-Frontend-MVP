@@ -15,6 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useRouter } from "next/router"
+import { redirect } from 'next/navigation';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -33,11 +35,11 @@ export function DataTable<TData, TValue>({
   const buttonCss =
     // { text: "Delivery Rate", color: "hover:bg-[#00E096]" }
     { text: "Click Rate", color: "hover:bg-[#0E9AFF]" }
-    // { text: "Open Rate", color: "hover:bg-[#BF83FF]" }
-    // { text: "Bounce Rate", color: "hover:bg-[#FF947A]" }
-    // { text: "Issues", color: "hover:bg-[#FA5A7D]" }
+  // { text: "Open Rate", color: "hover:bg-[#BF83FF]" }
+  // { text: "Bounce Rate", color: "hover:bg-[#FF947A]" }
+  // { text: "Issues", color: "hover:bg-[#FA5A7D]" }
 
-    return (
+  return (
     <div className="rounded-md border">
       <Table>
         <TableHeader>
@@ -65,7 +67,7 @@ export function DataTable<TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
                 className={`p-2 ${buttonCss.color} border`}
-                onClick={()=>alert('')}>
+                onClick={() => redirect("/instances/id") }>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

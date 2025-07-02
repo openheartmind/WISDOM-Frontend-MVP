@@ -41,7 +41,7 @@ export default function NewInstance() {
   };
 
   const handleCancel = () => {
-    window.location.href = "/instances";
+    window.location.href = "/";
   };
 
   return (
