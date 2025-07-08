@@ -2,6 +2,7 @@
 import { ArrowLeft, CogIcon, User } from "lucide-react";
 import * as React from "react";
 import { usePathname, useRouter } from "next/navigation";
+import LOGO from "/public/logo.svg"
 import { useAuth } from "@/context/AuthContext";
 import { ProfileDropdown } from "@/components/ProfileDropdown";
 import Image from "next/image";
