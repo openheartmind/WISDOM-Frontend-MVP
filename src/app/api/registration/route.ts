@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     console.error("Error:", error);
     return NextResponse.json(
       {
-        message: "Failed to register",
+        message: "Failed to create instance",
         details: "Could not connect to service",
       },
       { status: 500 }

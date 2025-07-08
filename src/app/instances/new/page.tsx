@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type { ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import LabeledInput from "@/components/ui/labeledInput";
@@ -12,6 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CustomToastie } from "@/components/ui/customtoastie";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 interface Dimension {
   title: string;
@@ -26,6 +29,7 @@ interface NewInstanceDetails {
 
 export default function NewInstance() {
   const [newMemberEmail, setNewMemberEmail] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [details, setDetails] = useState<NewInstanceDetails>({
     name: "",
     description: "",
@@ -35,10 +39,53 @@ export default function NewInstance() {
     ],
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const router = useRouter();
+  const { toast } = useToast()
+
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Instance details:", details);
-  };
+    try {
+      setIsLoading(true);
+      const token = localStorage.getItem('auth_token')
+      if(token) {
+
+        const response = await fetch("/api/instance", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: details.name,
+            description: details.description,
+          }),
+        });
+
+        const {data, status} = await response.json();
+console.log({status});
+
+        // Handle successful login - accept both 200 and 201 status codes
+        if (status === 200 || status === 201) {
+          console.log('Instance Successful');
+          console.log({data});
+          CustomToastie(toast, {
+            style: 'green',
+            description: "Instance created successfully",
+          })
+          router.push('/')
+        }
+
+      }
+
+    } catch (error) {
+     console.log({error});
+     
+    } finally {
+      setIsLoading(false);
+    }
+
+  }, [details])
+
 
   const handleCancel = () => {
     window.location.href = "/instances";
@@ -103,12 +150,12 @@ export default function NewInstance() {
                 ))}
               </div>
 
-              <p className="!text-[17px] !font-normal text-center xs:mt- sm:mt-5 md:mt-5 lg:mt-10">
+              <p className="!text-[17px] !font-normal text-center xs:mt-5 sm:mt-5 md:mt-5 lg:mt-10">
                 Adding members to this instance will be available after creation
               </p>
             </div>
 
-            <div className="justify-self-center fixed xs:bottom-8 sm:bottom-8 lg:bottom-20 xl:bottom-20 left-0 right-0 w-full max-w-md mx-auto">
+            <div className="justify-self-center fixed bottom-10 left-0 right-0 w-full max-w-md mx-auto px-4">
               <div className="flex gap-6">
                 <Button
                   type="button"
@@ -121,8 +168,9 @@ export default function NewInstance() {
                 <Button
                   type="submit"
                   className="flex-1 bg-[#2196F3] hover:bg-[#2196F3]/90 rounded-lg py-3"
+                  disabled={isLoading}
                 >
-                  Create
+                  {isLoading ? "Creating Instance..." : "Create"}
                 </Button>
               </div>
             </div>
