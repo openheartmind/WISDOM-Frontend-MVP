@@ -55,7 +55,14 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		}
+  		},
+		  screens: {
+			'xs': { 'max': '600px' }, // Extra small devices (phones, 600px and down)
+			'sm': '600px',            // Small devices (portrait tablets and large phones, 600px and up)
+			'md': '768px',            // Medium devices (landscape tablets, 768px and up)
+			'lg': '992px',            // Large devices (laptops/desktops, 992px and up)
+			'xl': '1200px',           // Extra large devices (large laptops and desktops, 1200px and up)
+		  },
   	}
   },
   plugins: [require("tailwindcss-animate")],
